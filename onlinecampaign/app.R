@@ -41,7 +41,15 @@ ui <- dashboardPage( skin = "purple",
                                                buttonLabel = "Buscar...",
                                                placeholder = "Aun no seleccionas el archivo..."),
                                      tags$hr(),
-                                     p('Cargar datos en formato .xlsx')
+                                     p('Cargar datos en formato .xlsx'),
+                                   
+                                     textInput(inputId = "datosnum",
+                                       label = "Seleccionar columnas:",
+                                       placeholder = "2,3,5,..."
+                                     ),
+                                     tags$hr(),
+                                     p("Introducir las columnas numéricas de los datos mostrados
+                                       en un vector delimitado por coma")
                                  ),
                                  box(width = 9,
                                      h3('Datos:'),
