@@ -41,7 +41,11 @@ ui <- dashboardPage( skin = "purple",
                                                buttonLabel = "Buscar...",
                                                placeholder = "Aun no seleccionas el archivo..."),
                                      tags$hr(),
-                                     p('Cargar datos en formato .xlsx')
+                                     p('Cargar datos en formato .xlsx'),
+                                     checkboxGroupInput(inputId = 'columnas',
+                                                        label = 'seleccione columnas',
+                                                        choices = ''
+                                                        )
                                  ),
                                  box(width = 9,
                                      h3('Datos:'),
@@ -51,7 +55,7 @@ ui <- dashboardPage( skin = "purple",
                      )
 )
 
-server <- function(input, output) {
+server <- function(input, output,session) {
   
   data<-reactive({
     infile<-input$cargardatos
@@ -67,6 +71,11 @@ server <- function(input, output) {
   output$datos1<-renderDataTable({
     return(data())
   },options=list(scrollX = TRUE,scrollY=300,searching=FALSE))
+  
+  observe({
+    vars<-names(data())
+    updateCheckboxGroupInput(session, 'columnas', choices = vars)
+  })
   
 }
 
