@@ -26,8 +26,8 @@ ui <- dashboardPage( skin = "purple",
                          menuItem("Introducción",tabName = 'intro',icon = icon("align-justify")),
                          menuItem("Datos",tabName = 'datos',icon = icon("folder-open")),
                          menuItem("ACP",tabName = 'acp',icon = icon("calculator")),
-                         menuItem("Agrupación",tabName = 'agrup',icon = icon("chart-pie",lib = "font-awesome")),
-                         menuItem("Resumen",tabName = 'resu',icon = icon("chart-bar",lib = "font-awesome"))
+                         menuItem("Agrupación",tabName = 'agrup',icon = icon("th",lib = "glyphicon")),
+                         menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon"))
                          
                        )
                      ),
