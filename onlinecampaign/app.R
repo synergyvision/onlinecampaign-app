@@ -34,7 +34,7 @@ ui <- dashboardPage( skin = "purple",
                      dashboardBody(
                        tabItems(
                          tabItem(tabName = 'datos',
-                                 box(width = 3,
+                                 fluidRow(box(width = 3,
                                      title = 'Cargar Datos',
                                      fileInput(inputId = 'cargardatos',
                                                label = "Seleccionar archivo:",
@@ -50,7 +50,7 @@ ui <- dashboardPage( skin = "purple",
                                  ),
                                  box(width = 9,
                                      h3('Datos:'),
-                                     dataTableOutput('datos1'))
+                                     dataTableOutput('datos1')))
                          )
                        )
                      )
