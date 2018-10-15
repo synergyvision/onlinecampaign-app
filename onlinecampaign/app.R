@@ -44,7 +44,7 @@ ui <- dashboardPage( skin = "purple",
                                      p('Cargar datos en formato .xlsx'),
 
                                      checkboxGroupInput(inputId = 'columnas',
-                                                        label = 'seleccione columnas',
+                                                        label = 'Seleccione de lo siguiente las columnas numéricas que desee usar para los análisis posteriores',
                                                         choices = ''
                                                         )
                                  ),
