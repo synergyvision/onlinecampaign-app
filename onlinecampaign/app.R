@@ -4,6 +4,16 @@
 #ACP
 #Regresion lineal.
 
+ensure_version <- function(pkg, ver = "0.0") {
+  if (system.file(package = pkg)  == "" || packageVersion(pkg) < ver)
+    install.packages(pkg)
+}
+
+ensure_version("shiny", "1.1.0")
+ensure_version("readxl", "1.1.0")
+ensure_version("shinydashboard", "0.7.0")
+
+
 library(shiny)
 library(shinydashboard)
 library('readxl')
