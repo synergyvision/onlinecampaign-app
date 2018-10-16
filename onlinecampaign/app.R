@@ -75,7 +75,7 @@ ui <- dashboardPage( skin = "purple",
                                                    column(width=6,h3("Varianza Acumulada por cada componente"),plotOutput("imagen2"))
                                                  )
                                         ),
-                                        tabPanel(h4("Variables Representativas"),"Hola2"),
+                                        tabPanel(h4("Variables Representativas"),fluidRow(box(solidHeader = TRUE,width=12,uiOutput("slid")))),
                                         tabPanel(h4("Proyecciones"),"Hola3")))
                          )
                        )
@@ -127,6 +127,15 @@ server <- function(input, output,session) {
     return(z1)
   },rownames = TRUE,digits = 4)
   
+  output$slid<-renderUI({
+    sliderInput( inputId = "num",
+                 label = "Seleccionar el número de Componentes con
+                 los que desee quedarse:", value = 1, min = 1,
+                 max = ncol(z()), step = 1
+    )
+  })
+  
+
 }
 
 shinyApp(ui, server)
