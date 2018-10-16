@@ -54,7 +54,7 @@ ui <- dashboardPage( skin = "purple",
                                      dataTableOutput('datos1')))
                          ),
                          tabItem(tabName = "acp",
-                                 tabBox(width = 12,
+                                 fluidRow(tabBox(width = 12,
                                         title = "",id="tab1",
                                         tabPanel(h4("Métodos"),
                                                  fluidRow(column(width=3,radioButtons(inputId = "metodo1",label = "Elegir método",selected = '',
@@ -77,6 +77,7 @@ ui <- dashboardPage( skin = "purple",
                                         ),
                                         tabPanel(h4("Variables Representativas"),"Hola2"),
                                         tabPanel(h4("Proyecciones"),"Hola3")))
+                         )
                        )
                      )
 )
