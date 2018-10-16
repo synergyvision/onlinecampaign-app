@@ -101,6 +101,7 @@ server <- function(input, output,session) {
   z<-reactive({data()[,c(input$columnas)]})
   
   
+  
   output$datos2<-renderTable({
     z1<-cor(z())
     return(z1)
