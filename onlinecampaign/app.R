@@ -18,6 +18,7 @@ library(shiny)
 library(shinydashboard)
 library('readxl')
 
+
 ui <- dashboardPage( skin = "purple",
                      dashboardHeader(title=tags$img(src="img/vision.png", width=100)),
                      dashboardSidebar(
@@ -60,9 +61,13 @@ ui <- dashboardPage( skin = "purple",
                                                                                       choices = c("Matriz de Correlación","Matriz de Covarianza")
                                                  )
                                                  ),
-                                                 conditionalPanel(condition = "input.metodo1=='Matriz de Correlación'",column(width = 9,h3("Matriz de Correlación"),tableOutput("datos2"))
+                                                 conditionalPanel(condition = "input.metodo1=='Matriz de Correlación'",column(width = 9,h3("Matriz de Correlación"),div(style='overflow-x: scroll',
+                                                                                                                                                                        tableOutput("datos2")
+                                                 ))
                                                  ),
-                                                 conditionalPanel(condition = "input.metodo1=='Matriz de Covarianza'",column(width = 9,h3("Matriz de Covarianza"),tableOutput("datos3"))
+                                                 conditionalPanel(condition = "input.metodo1=='Matriz de Covarianza'",column(width = 9,h3("Matriz de Covarianza"),div(style='overflow-x: scroll',
+                                                                                                                                                                      tableOutput("datos3")
+                                                 ))
                                                  )
                                                  ),
                                                  fluidRow(
@@ -116,8 +121,10 @@ server <- function(input, output,session) {
   },rownames = TRUE,digits = 4)
   
   output$datos3<-renderTable({
-    return(head(z()))
-  })
+    z<-na.omit(z())
+    z1<-cov(z())
+    return(z1)
+  },rownames = TRUE,digits = 4)
   
 }
 
