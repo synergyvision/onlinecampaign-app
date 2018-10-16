@@ -110,25 +110,6 @@ server <- function(input, output,session) {
     return(head(z()))
   })
   
-  
-  # if(is.null(input$metodo1)){
-  #    return()
-  #  } 
-  #  else if(input$metodo1=="Matriz de Correlación"){
-  #    
-  # for(i in n:ncol(z())){
-  #   z()[,i]<-as.numeric(z()[,i])
-  # }
-  # z<-na.omit(z())
-  # cor(z())
-  # }
-  # 
-  # else if(input$metodo1=="Matriz de Covarianza"){
-  # for(i in n:ncol(z())){
-  #   z()[,i]<-as.numeric(z()[,i])
-  # }
-  # z<-na.omit(z())
-  # cov(z())
 }
 
 shinyApp(ui, server)
