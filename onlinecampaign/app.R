@@ -35,23 +35,43 @@ ui <- dashboardPage( skin = "purple",
                        tabItems(
                          tabItem(tabName = 'datos',
                                  fluidRow(box(width = 3,
-                                     title = 'Cargar Datos',
-                                     fileInput(inputId = 'cargardatos',
-                                               label = "Seleccionar archivo:",
-                                               buttonLabel = "Buscar...",
-                                               placeholder = "Aun no seleccionas el archivo..."),
-                                     tags$hr(),
-                                     p('Cargar datos en formato .xlsx'),
-
-                                     checkboxGroupInput(inputId = 'columnas',
-                                                        label = 'Seleccione de lo siguiente las columnas numéricas que desee usar para los análisis posteriores',
-                                                        choices = ''
-                                                        )
+                                              title = 'Cargar Datos',
+                                              fileInput(inputId = 'cargardatos',
+                                                        label = "Seleccionar archivo:",
+                                                        buttonLabel = "Buscar...",
+                                                        placeholder = "Aun no seleccionas el archivo..."),
+                                              tags$hr(),
+                                              p('Cargar datos en formato .xlsx'),
+                                              
+                                              checkboxGroupInput(inputId = 'columnas',
+                                                                 label = 'Seleccione de lo siguiente las columnas numéricas que desee usar para los análisis posteriores',
+                                                                 choices = ''
+                                              )
                                  ),
                                  box(width = 9,
                                      h3('Datos:'),
                                      dataTableOutput('datos1')))
-                         )
+                         ),
+                         tabItem(tabName = "acp",
+                                 tabBox(width = 12,
+                                        title = "",id="tab1",
+                                        tabPanel(h4("Métodos"),
+                                                 fluidRow(column(width=3,radioButtons(inputId = "metodo1",label = "Elegir método",selected = '',
+                                                                                      choices = c("Matriz de Correlación","Matriz de Covarianza")
+                                                 )
+                                                 ),
+                                                 conditionalPanel(condition = "input.metodo1=='Matriz de Correlación'",column(width = 9,h3("Matriz de Correlación"),tableOutput("datos2"))
+                                                 ),
+                                                 conditionalPanel(condition = "input.metodo1=='Matriz de Covarianza'",column(width = 9,h3("Matriz de Covarianza"),tableOutput("datos3"))
+                                                 )
+                                                 ),
+                                                 fluidRow(
+                                                   column(width=6,h3("Porcentaje de varianza por componente principal"),plotOutput("imagen1")),
+                                                   column(width=6,h3("Varianza Acumulada por cada componente"),plotOutput("imagen2"))
+                                                 )
+                                        ),
+                                        tabPanel(h4("Variables Representativas"),"Hola2"),
+                                        tabPanel(h4("Proyecciones"),"Hola3")))
                        )
                      )
 )
@@ -78,6 +98,37 @@ server <- function(input, output,session) {
     updateCheckboxGroupInput(session, 'columnas', choices = vars)
   })
   
+  z<-reactive({data()[,c(input$columnas)]})
+  
+  
+  output$datos2<-renderTable({
+    z1<-cor(z())
+    return(z1)
+  },rownames = TRUE,digits = 4)
+  
+  output$datos3<-renderTable({
+    return(head(z()))
+  })
+  
+  
+  # if(is.null(input$metodo1)){
+  #    return()
+  #  } 
+  #  else if(input$metodo1=="Matriz de Correlación"){
+  #    
+  # for(i in n:ncol(z())){
+  #   z()[,i]<-as.numeric(z()[,i])
+  # }
+  # z<-na.omit(z())
+  # cor(z())
+  # }
+  # 
+  # else if(input$metodo1=="Matriz de Covarianza"){
+  # for(i in n:ncol(z())){
+  #   z()[,i]<-as.numeric(z()[,i])
+  # }
+  # z<-na.omit(z())
+  # cov(z())
 }
 
 shinyApp(ui, server)
