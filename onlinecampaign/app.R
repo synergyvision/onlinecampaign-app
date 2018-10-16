@@ -86,6 +86,7 @@ server <- function(input, output,session) {
     else{
       D<-as.data.frame(read_excel(infile$datapath))
       D<-na.omit(D)
+      return(D)
     }
   })
   
@@ -98,10 +99,17 @@ server <- function(input, output,session) {
     updateCheckboxGroupInput(session, 'columnas', choices = vars)
   })
   
-  z<-reactive({data()[,c(input$columnas)]})
-  
+  z<-reactive({
+    d<-data()[,c(input$columnas)]
+    for(i in 1:ncol(d)) {
+      d[,i]<-as.numeric(d[,i])
+    }
+    d
+  })
+
   
   output$datos2<-renderTable({
+    z<-na.omit(z())
     z1<-cor(z())
     return(z1)
   },rownames = TRUE,digits = 4)
