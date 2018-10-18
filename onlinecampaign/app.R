@@ -136,11 +136,12 @@ server <- function(input, output,session) {
   })
   
   output$imagen2<-renderPlot({
-    d1<-summary(pr)
+    d1<-summary(pr())
     d2<-d1$importance
     d3<-d2[3,]
     d4<-unname(d3)
     d4<-d4*100
+    
     
     ggplot(mapping=aes(x=1:ncol(z()),y=d4))+geom_line(colour='blue')+geom_point(colour="blue")+
       xlab("Componentes principales")+ylab("Varianzas Acumuladas")+
