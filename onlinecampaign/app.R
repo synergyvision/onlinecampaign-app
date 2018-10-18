@@ -128,7 +128,10 @@ server <- function(input, output,session) {
   },rownames = TRUE,digits = 4)
   
   pr<-reactive({
-    if(input$metodo1=="Matriz de Correlación"){
+    if(is.null(input$metodo1)){
+      NULL
+    }
+    else if(input$metodo1=="Matriz de Correlación"){
     prcomp(z(),scale. = T)
   } else if(input$metodo1=="Matriz de Covarianza"){
     prcomp(z(),scale. = F)
@@ -136,6 +139,10 @@ server <- function(input, output,session) {
   })
   
   output$imagen1<-renderPlot({
+    if(is.null(pr())){
+      return()
+    }
+    else {
     m<-summary(pr())
     m1<-m$importance
     PVE<-m1[2,]
@@ -152,10 +159,14 @@ server <- function(input, output,session) {
     prueba$nombres<-factor(prueba$nombres,levels = prueba$nombres) #esto evita que el comp 10 aparezca en comp 2 y ordena los datos como quiero que aparezca en el plot
     
     ggplot(prueba,mapping=aes(x=nombres,y=PVE))+geom_bar(stat = 'identity',fill='darkblue')+geom_text(stat='identity',aes(label=scales::percent(PVE/100)),vjust=-0.3)+scale_y_continuous(labels = function(x) paste0(x, "%"))+xlab('Componentes principales')+ylab('Porcentaje de varianza')
-    
+    }
   })
   
   output$imagen2<-renderPlot({
+    if(is.null(pr())){
+      return()
+    }
+    else {
     d1<-summary(pr())
     d2<-d1$importance
     d3<-d2[3,]
@@ -175,7 +186,7 @@ server <- function(input, output,session) {
       xlab("Componentes principales")+ylab("Varianzas Acumuladas")+
       scale_y_continuous(labels = function(x) paste0(x,"%"))+stat_summary(geom = "line",col="blue")
       
-
+    }
   })
 
   output$slid<-renderUI({
