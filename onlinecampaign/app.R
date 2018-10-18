@@ -12,12 +12,12 @@ ensure_version <- function(pkg, ver = "0.0") {
 ensure_version("shiny", "1.1.0")
 ensure_version("readxl", "1.1.0")
 ensure_version("shinydashboard", "0.7.0")
-
+ensure_version("ggplot2", "3.0.0")
 
 library(shiny)
 library(shinydashboard)
 library('readxl')
-
+library("ggplot2")
 
 ui <- dashboardPage( skin = "purple",
                      dashboardHeader(title=tags$img(src="img/vision.png", width=100)),
@@ -126,6 +126,29 @@ server <- function(input, output,session) {
     z1<-cov(z())
     return(z1)
   },rownames = TRUE,digits = 4)
+  
+  pr<-reactive({
+    if(input$metodo1=="Matriz de Correlación"){
+    prcomp(z(),scale. = T)
+  } else if(input$metodo1=="Matriz de Covarianza"){
+    prcomp(z(),scale. = F)
+  }
+  })
+  
+  output$imagen2<-renderPlot({
+    d1<-summary(pr)
+    d2<-d1$importance
+    d3<-d2[3,]
+    d4<-unname(d3)
+    d4<-d4*100
+    
+    ggplot(mapping=aes(x=1:ncol(z()),y=d4))+geom_line(colour='blue')+geom_point(colour="blue")+
+      xlab("Componentes principales")+ylab("Varianzas Acumuladas")+
+      scale_y_continuous(labels = function(x) paste0(x,"%"))+
+      scale_x_continuous(breaks = 1:ncol(z()))
+    
+  })
+  
   
   output$slid<-renderUI({
     sliderInput( inputId = "num",
