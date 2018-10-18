@@ -138,6 +138,7 @@ server <- function(input, output,session) {
   }
   })
   
+  
   output$imagen1<-renderPlot({
     if(is.null(pr())){
       return()
