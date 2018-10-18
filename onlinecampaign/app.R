@@ -149,7 +149,7 @@ server <- function(input, output,session) {
     }
     
     prueba<-data.frame(nombres,PVE)
-    prueba$nombres<-factor(prueba$nombres,levels = prueba$nombres)
+    prueba$nombres<-factor(prueba$nombres,levels = prueba$nombres) #esto evita que el comp 10 aparezca en comp 2 y ordena los datos como quiero que aparezca en el plot
     
     ggplot(prueba,mapping=aes(x=nombres,y=PVE))+geom_bar(stat = 'identity',fill='darkblue')+geom_text(stat='identity',aes(label=scales::percent(PVE/100)),vjust=-0.3)+scale_y_continuous(labels = function(x) paste0(x, "%"))+xlab('Componentes principales')+ylab('Porcentaje de varianza')
     
