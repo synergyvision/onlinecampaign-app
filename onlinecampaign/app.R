@@ -162,10 +162,19 @@ server <- function(input, output,session) {
     d4<-unname(d3)
     d4<-d4*100
     
-    ggplot(mapping=aes(x=1:ncol(z()),y=d4))+geom_line(colour='blue')+geom_point(colour="blue")+
+    comp<-c('Comp')
+    nombres<-c()
+    for(i in 1:ncol(z())){
+      nombres[i]<-paste0(comp,sep=' ',i)
+    }
+    
+    prueba<-data.frame(nombres,d4)
+    prueba$nombres<-factor(prueba$nombres,levels = prueba$nombres)
+    
+    ggplot(prueba,mapping=aes(x=nombres,y=d4,group=1))+geom_point(colour="blue")+
       xlab("Componentes principales")+ylab("Varianzas Acumuladas")+
-      scale_y_continuous(labels = function(x) paste0(x,"%"))+
-      scale_x_continuous(breaks = 1:ncol(z()))
+      scale_y_continuous(labels = function(x) paste0(x,"%"))+stat_summary(geom = "line",col="blue")
+      
 
   })
 
