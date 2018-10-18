@@ -135,6 +135,7 @@ server <- function(input, output,session) {
   }
   })
   
+  
   output$imagen1<-renderPlot({
     m<-summary(pr())
     m1<-m$importance
