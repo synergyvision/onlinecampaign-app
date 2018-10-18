@@ -110,7 +110,7 @@ server <- function(input, output,session) {
     for(i in 1:ncol(d)) {
       d[,i]<-as.numeric(d[,i])
     }
-    d
+    na.omit(d)
   })
 
   
