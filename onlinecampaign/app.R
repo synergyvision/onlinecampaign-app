@@ -135,21 +135,40 @@ server <- function(input, output,session) {
   }
   })
   
+  output$imagen1<-renderPlot({
+    m<-summary(pr())
+    m1<-m$importance
+    PVE<-m1[2,]
+    PVE<-unname(PVE)
+    PVE<-PVE*100
+    
+    comp<-c('Comp')
+    nombres<-c()
+    for(i in 1:ncol(z())){
+      nombres[i]<-paste0(comp,sep=' ',i)
+    }
+    
+    prueba<-data.frame(nombres,PVE)
+    prueba$nombres<-factor(prueba$nombres,levels = prueba$nombres)
+    
+    ggplot(prueba,mapping=aes(x=nombres,y=PVE))+geom_bar(stat = 'identity',fill='darkblue')+geom_text(stat='identity',aes(label=scales::percent(PVE/100)),vjust=-0.3)+scale_y_continuous(labels = function(x) paste0(x, "%"))+xlab('Componentes principales')+ylab('Porcentaje de varianza')
+    
+  })
+  
   output$imagen2<-renderPlot({
     d1<-summary(pr)
     d2<-d1$importance
     d3<-d2[3,]
     d4<-unname(d3)
     d4<-d4*100
-    
+
     ggplot(mapping=aes(x=1:ncol(z()),y=d4))+geom_line(colour='blue')+geom_point(colour="blue")+
       xlab("Componentes principales")+ylab("Varianzas Acumuladas")+
       scale_y_continuous(labels = function(x) paste0(x,"%"))+
       scale_x_continuous(breaks = 1:ncol(z()))
-    
+
   })
-  
-  
+
   output$slid<-renderUI({
     sliderInput( inputId = "num",
                  label = "Seleccionar el número de Componentes con
