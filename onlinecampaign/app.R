@@ -57,9 +57,9 @@ ui <- dashboardPage( skin = "purple",
                                  fluidRow(tabBox(width = 12,
                                         title = "",id="tab1",
                                         tabPanel(h4("Métodos"),
-                                                 fluidRow(column(width=3,radioButtons(inputId = "metodo1",label = "Elegir método",selected = '',
+                                                 fluidRow(column(width=3,fluidRow(column(width=12,radioButtons(inputId = "metodo1",label = "Elegir método",selected = '',
                                                                                       choices = c("Matriz de Correlación","Matriz de Covarianza")
-                                                 )
+                                                 ))),fluidRow(box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'1. Método basado en la matriz de correlación: Se usa cuando los datos no son dimensionalmente homogéneos o el orden de magnitud de las variables no es el mismo',collapsible = TRUE,collapsed =TRUE))
                                                  ),
                                                  conditionalPanel(condition = "input.metodo1=='Matriz de Correlación'",column(width = 9,h3("Matriz de Correlación"),div(style='overflow-x: scroll',
                                                                                                                                                                         tableOutput("datos2")
