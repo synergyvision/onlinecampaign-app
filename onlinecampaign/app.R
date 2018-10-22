@@ -75,7 +75,8 @@ ui <- dashboardPage( skin = "purple",
                                                    column(width=6,h3("Varianza Acumulada por cada componente"),plotOutput("imagen2"))
                                                  )
                                         ),
-                                        tabPanel(h4("Variables Representativas"),fluidRow(box(solidHeader = TRUE,width=12,uiOutput("slid")))),
+                                        tabPanel(h4("Variables Representativas"),fluidRow(box(solidHeader = TRUE,width=12,uiOutput("slid"))),
+                                                 fluidRow(box(verbatimTextOutput("variable"),title = "Variables Representativas de las Componentes selecciondas",width = 12))),
                                         tabPanel(h4("Proyecciones"),"Hola3")))
                          )
                        )
@@ -196,6 +197,31 @@ server <- function(input, output,session) {
                  los que desee quedarse:", value = 1, min = 1,
                  max = ncol(z()), step = 1
     )
+  })
+  
+  r<-reactive({
+    pr()$rotation
+  })
+  
+  w<-reactive({
+    w1<-c()
+  for(i in 1:ncol(r())){
+    w1[i]<-rownames(r())[which.max(abs(r()[,i]))]
+  }
+    w1
+})  
+  
+  output$variable<-renderPrint({
+   
+    r1<-r()
+    for (i in 1:length(w())) {
+      while(duplicated(w())[i]==TRUE){
+        r1<-r1[-which(rownames(r1)==w()[i]),] 
+        w()[i]<-names(which.max(abs(r1[,i])))
+       
+      }  
+    }
+    print(w())
   })
   
 
