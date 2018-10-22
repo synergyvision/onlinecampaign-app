@@ -209,19 +209,20 @@ server <- function(input, output,session) {
   for(i in 1:ncol(r())){
     w1[i]<-rownames(r())[which.max(abs(r()[,i]))]
   }
-    w1
-})  
-  
-  output$variable<-renderPrint({
-   
-    r1<-r()
-    for (i in 1:length(w())) {
-      while(duplicated(w())[i]==TRUE){
-        r1<-r1[-which(rownames(r1)==w()[i]),]
-        w()[i]<-names(which.max(abs(r1[,i])))
 
-      }
-    }
+    w2<-w1
+   r1<-r()
+   for(i in 1:length(w2)){
+     while(duplicated(w2)[i]==TRUE){
+       r1<-r1[-which(rownames(r1)==w2[i]),]
+       w2[i]<-names(which.max(abs(r1[,i])))
+     }
+   }
+   w2
+})
+
+output$variable<-renderPrint({
+
     print(w())
   })
   
