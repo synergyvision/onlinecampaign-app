@@ -72,7 +72,7 @@ ui <- dashboardPage( skin = "purple",
                                                  ),
                                                  fluidRow(
                                                    column(width=6,h3("Porcentaje de varianza por componente principal"),plotOutput("imagen1")),
-                                                   column(width=6,h3("Varianza Acumulada por cada componente"),plotOutput("imagen2"))
+                                                   column(width=6,h3("Porcentaje de varianza Acumulada por cada componente"),plotOutput("imagen2"))
                                                  )
                                         ),
                                         tabPanel(h4("Variables Representativas"),fluidRow(box(solidHeader = TRUE,width=12,uiOutput("slid"))),
