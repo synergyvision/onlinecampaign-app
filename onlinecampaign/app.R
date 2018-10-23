@@ -200,7 +200,7 @@ server <- function(input, output,session) {
   })
   
   r<-reactive({
-    pr()$rotation
+    as.matrix(pr()$rotation[,1:input$num])
   })
   
   
@@ -220,10 +220,20 @@ server <- function(input, output,session) {
    }
    w2
 })
+  
+  v<-reactive({ 
+    v1<-c()
+  for (i in 1:length(w())){
+    v1[i]<-r()[which(names(r()[,i])==w()[i]),i]
+  }
+  z1<-c()
+  z1<-setNames(v1,w())
+  z1
+  })
 
 output$variable<-renderPrint({
 
-    print(w())
+    print(v())
   })
   
 
