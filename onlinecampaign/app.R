@@ -76,7 +76,7 @@ ui <- dashboardPage( skin = "purple",
                                                  )
                                         ),
                                         tabPanel(h4("Variables Representativas"),fluidRow(box(solidHeader = TRUE,width=12,uiOutput("slid"))),
-                                                 fluidRow(box(verbatimTextOutput("variable"),title = "Variables Representativas de las Componentes selecciondas",width = 12))),
+                                                 fluidRow(box(verbatimTextOutput("variable"),title = "Variables Representativas de las Componentes Seleccionadas",width = 12))),
                                         tabPanel(h4("Proyecciones"),"Hola3")))
                          )
                        )
@@ -203,11 +203,13 @@ server <- function(input, output,session) {
     as.matrix(pr()$rotation[,1:input$num])
   })
   
+  
   w<-reactive({
     w1<-c()
   for(i in 1:ncol(r())){
     w1[i]<-rownames(r())[which.max(abs(r()[,i]))]
   }
+
     w2<-w1
    r1<-r()
    for(i in 1:length(w2)){
@@ -218,9 +220,20 @@ server <- function(input, output,session) {
    }
    w2
 })
+  
+  v<-reactive({ 
+    v1<-c()
+  for (i in 1:length(w())){
+    v1[i]<-r()[which(names(r()[,i])==w()[i]),i]
+  }
+  z1<-c()
+  z1<-setNames(v1,w())
+  z1
+  })
 
 output$variable<-renderPrint({
-    print(w())
+
+    print(v())
   })
   
 
