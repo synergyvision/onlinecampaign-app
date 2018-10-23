@@ -200,7 +200,7 @@ server <- function(input, output,session) {
   })
   
   r<-reactive({
-    pr()$rotation
+    as.matrix(pr()$rotation[,1:input$num])
   })
   
   w<-reactive({
