@@ -92,7 +92,6 @@ ui <- dashboardPage( skin = "purple",
 
                        )
                      )
-)
 
 server <- function(input, output,session) {
   
