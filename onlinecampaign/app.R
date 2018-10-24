@@ -79,7 +79,7 @@ ui <- dashboardPage( skin = "purple",
                                                  fluidRow(box(verbatimTextOutput("variable"),title = "Variables Representativas de las Componentes Seleccionadas",width = 12,status = "primary")),
                                                  fluidRow(box(title = "Observación",width = 8,solidHeader = TRUE,status = "primary","Se recomienda usar el número de componenentes que representen un 80% de variabilidad de los datos. El porcentaje de variabilidad de las componentes principales lo observamos anteriormente.",collapsible = TRUE,collapsed =TRUE),
                                                           box(background = 'purple',width=4,div(img(src="img/vision.png", width=200),style="text-align: center;")))),
-                                        tabPanel(h4("Proyecciones"),"Hola3")))
+                                        tabPanel(h4("Proyecciones"),column(width = 6,h3('titulo 1'),plotOutput('imagen3')),column(width = 6,h3('titulo 2'),plotOutput('imagen4')))))
                          )
                        )
                      )
