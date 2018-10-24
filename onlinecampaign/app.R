@@ -80,7 +80,13 @@ ui <- dashboardPage( skin = "purple",
                                                  fluidRow(box(title = "Observación",width = 8,solidHeader = TRUE,status = "primary","Se recomienda usar el número de componenentes que representen un 80% de variabilidad de los datos. El porcentaje de variabilidad de las componentes principales lo observamos anteriormente.",collapsible = TRUE,collapsed =TRUE),
                                                           box(background = 'purple',width=4,div(img(src="img/vision.png", width=200),style="text-align: center;")))),
                                         tabPanel(h4("Proyecciones"),fluidRow(column(width = 5,h3('Componente 1 Vs. Componente 2'),plotOutput('imagen3')),column(width = 5,h3('Componente 2 Vs. Componente 2'),plotOutput('imagen4'))))))
-                         )
+                         ),
+                         tabItem(tabName = 'agrup',
+                                 fluidRow(tabBox(width = 12,
+                                                 title = '',id='tab2',
+                                                 tabPanel(h4('Elección de grupos'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun'))),
+                                                                                                   fluidRow(box(width = 12,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar el número de componenentes que representen un 80% de variabilidad de los datos. El porcentaje de variabilidad de las componentes principales lo observamos anteriormente.",collapsible = TRUE,collapsed =TRUE))))),
+                                                 tabPanel(h4('Resultados'),'hola yose'))))
                        )
                      )
 )
@@ -249,6 +255,12 @@ output$imagen3<-renderPlot({
   
 output$imagen4<-renderPlot({
   ggplot(cp(),aes(x=cp()$PC2,y=cp()$PC1))+geom_point(col="darkblue")+xlab("PC2")+ylab("PC1")
+})
+
+output$colun<-renderUI({
+  checkboxGroupInput(inputId = 'columnasgrupos',
+                     label = 'Elegir las variables para la formación de grupos',
+                     choices = c(input$columnas))
 })
 
 }
