@@ -88,7 +88,7 @@ ui <- dashboardPage( skin = "purple",
                                                  tabPanel(h4('Elección de grupos'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun')))
                                                                                                    ),
                                                                                             column(width = 4,h3("Diagrama de Codo"),plotOutput("elbow"))),
-                                                          fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representati",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))),
+                                                          fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))),
                                                  tabPanel(h4('Resultados'),'hola yose'))))
                          )
 
@@ -273,7 +273,5 @@ output$elbow<-renderPlot({
 
 }
 
-#fluidRow(box(width = 12,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE))
-#fluidRow(box(width = 12,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))
 
 shinyApp(ui, server)
