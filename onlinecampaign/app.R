@@ -267,8 +267,24 @@ output$colun<-renderUI({
                      choices = c(input$columnas))
 })
 
+datascale<-reactive({
+  d1<-z()[,c(input$columnasgrupos)]
+  d2<-na.omit(d1)
+  d3<-scale(d2)
+  return(d3)
+})
+
+numbergroups<-reactive({
+  wss<-c()
+  wss[1]<-(nrow(datascale())-1)*sum(apply(datascale(),2,var))
+  for(i in 2:15){
+    wss[i]<-sum(kmeans(datascale(),center=i,nstart = 50)$withinss)
+  }
+  wss
+})
+
 output$elbow<-renderPlot({
-  ggplot(cp(),aes(x=cp()$PC2,y=cp()$PC1))+geom_point(col="darkblue")+xlab("PC2")+ylab("PC1")
+  ggplot(mapping = aes(x=1:15,y=numbergroups()))+geom_line(colour='darkblue')+geom_point(colour='darkblue',size=3)+xlab('Número de Clusters')+ylab('Varianza total inter-cluster')+scale_x_continuous(breaks = 1:15)
 })
 
 }
