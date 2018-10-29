@@ -13,11 +13,17 @@ ensure_version("shiny", "1.1.0")
 ensure_version("readxl", "1.1.0")
 ensure_version("shinydashboard", "0.7.0")
 ensure_version("ggplot2", "3.0.0")
+ensure_version("cluster", "2.0.6")
+ensure_version("factoextra", "1.0.5")
 
 library(shiny)
 library(shinydashboard)
 library('readxl')
 library("ggplot2")
+library('cluster')
+library("factoextra")
+
+
 
 ui <- dashboardPage( skin = "purple",
                      dashboardHeader(title=tags$img(src="img/vision.png", width=100)),
@@ -289,8 +295,18 @@ output$elbow<-renderPlot({
   ggplot(mapping = aes(x=1:15,y=numbergroups()))+geom_line(colour='darkblue')+geom_point(colour='darkblue',size=3)+xlab('Número de Clusters')+ylab('Varianza total inter-cluster')+scale_x_continuous(breaks = 1:15)
 })
 
-output$clusplot<-renderPlot({
-  ggplot(cp(),aes(x=cp()$PC1,y=cp()$PC2))+geom_point(col="darkblue")+xlab("PC1")+ylab("PC2")
+
+datadist<-reactive({
+  dist(datascale(),method = "euclidean")
+})
+
+
+datapam<-reactive({
+  pam(datadist(),k=input$cantidadgrupos)
+})
+
+output$cusplot<-renderPlot({
+  fviz_cluster(datapam(),ggtheme = theme_minimal(),ellipse.type = "euclid",star.plot=TRUE,stand = TRUE)
 })
 
 }
