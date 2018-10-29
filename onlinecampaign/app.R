@@ -312,11 +312,11 @@ output$silueta<-renderPlot({
 })
 
 output$comp1<-renderPlot({
-  
+  ggplot(mapping=aes(x=cp()$PC1,y=cp()$PC2))+geom_point(aes(x=cp()$PC1,y=cp()$PC2,colour=palette()[datapam()$clustering]),show.legend = FALSE)+xlab("PC1")+ylab("PC2")
 })
 
 output$comp2<-renderPlot({
-  
+  ggplot(mapping=aes(x=cp()$PC2,y=cp()$PC1))+geom_point(aes(x=cp()$PC2,y=cp()$PC1,colour=palette()[datapam()$clustering]),show.legend = FALSE)+xlab("PC2")+ylab("PC1")
 })
 
 }
