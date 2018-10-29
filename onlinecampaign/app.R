@@ -94,7 +94,7 @@ ui <- dashboardPage( skin = "purple",
                                                  tabPanel(h4('Elección de grupos'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun')))
                                                                                                    ),
                                                                                             column(width = 4,h3("Diagrama de Codo"),plotOutput("elbow")),
-                                                                                            column(width = 4,sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 1,max = 15,value = 1),
+                                                                                            column(width = 4,sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 2,max = 15,value = 2),
                                                                                                    fluidRow(h4('hola'),plotOutput('clusplot')))),
                                                           fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))),
                                                  tabPanel(h4('Resultados'),'hola yose'))))
@@ -296,16 +296,11 @@ output$elbow<-renderPlot({
 })
 
 
-datadist<-reactive({
-  dist(datascale(),method = "euclidean")
-})
-
-
 datapam<-reactive({
-  pam(datadist(),k=input$cantidadgrupos)
+  pam(datascale(),k=input$cantidadgrupos,stand = TRUE)
 })
 
-output$cusplot<-renderPlot({
+output$clusplot<-renderPlot({
   fviz_cluster(datapam(),ggtheme = theme_minimal(),ellipse.type = "euclid",star.plot=TRUE,stand = TRUE)
 })
 
