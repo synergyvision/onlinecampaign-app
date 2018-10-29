@@ -97,7 +97,7 @@ ui <- dashboardPage( skin = "purple",
                                                                                             column(width = 4,sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 1,max = 15,value = 1),
                                                                                                    fluidRow(h4('hola'),plotOutput('clusplot')))),
                                                           fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))),
-                                                 tabPanel(h4('Resultados'),'hola yose'))))
+                                                 tabPanel(h4('Resultados'),column(width = 4,h3('Método de la Silueta'),plotOutput('silueta'))))))
                          )
 
                        )
@@ -307,6 +307,11 @@ datapam<-reactive({
 
 output$cusplot<-renderPlot({
   fviz_cluster(datapam(),ggtheme = theme_minimal(),ellipse.type = "euclid",star.plot=TRUE,stand = TRUE)
+})
+
+output$silueta<-renderPlot({
+  fviz_silhouette(datapam(),ggtheme= theme_classic())
+  
 })
 
 }
