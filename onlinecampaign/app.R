@@ -99,7 +99,13 @@ ui <- dashboardPage( skin = "purple",
                                                           fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))),
                                                  tabPanel(h4('Resultados'),fluidRow(column(width = 4,h3('Método de la Silueta'),plotOutput('silueta')),
                                                                                     column(width = 4,h3('Componente 1 Vs. Componente 2'),plotOutput('comp1')),
-                                                                                    column(width = 4,h3('Componente 2 Vs. Componente 1'),plotOutput('comp2')))))))
+                                                                                    column(width = 4,h3('Componente 2 Vs. Componente 1'),plotOutput('comp2'))))))),
+                         tabItem(tabName = 'resu',
+                                 fluidRow(
+                                   box(width = 6,uiOutput('elecciongrupos'),
+                                       title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE,
+                                       verbatimTextOutput('holaprueba')),
+                                   box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido'))))
                          )
 
                        )
@@ -318,6 +324,38 @@ output$comp1<-renderPlot({
 output$comp2<-renderPlot({
   ggplot(mapping=aes(x=cp()$PC2,y=cp()$PC1))+geom_point(aes(x=cp()$PC2,y=cp()$PC1,colour=palette()[datapam()$clustering]),show.legend = FALSE)+xlab("PC2")+ylab("PC1")
 })
+
+
+output$elecciongrupos<-renderUI({
+  Grupo<-c('Grupo')
+  grupos<-c()
+  for(i in 1:input$cantidadgrupos){
+    grupos[i]<-paste0(Grupo,sep=' ',i)
+  }
+  selectInput(inputId = "elecciongrupos2",
+              label="Escoja el grupo a resumir",
+              choices = setNames(1:input$cantidadgrupos,grupos),
+              selected = NULL, 
+              width = NULL)
+})
+
+clusterpam<-reactive({
+  #cluster<-c('Cluster')
+  # for(i in 1:input$cantidadgrupos){ 
+  #   nam <- paste(cluster, i, sep = "")
+  #   assign(nam,clust_list_pam[[i]])
+  # }
+  clust_list_pam<-lapply(sort(unique(datapam()$clustering)),function(x)data()[which(datapam()$clustering==x),])
+  return(clust_list_pam[[as.numeric(input$elecciongrupos2)]])
+})
+
+output$holaprueba<-renderPrint({
+  summary(clusterpam())
+})
+
+output$grupoelegido<-renderDataTable({
+  return(clusterpam())
+},options=list(scrollX = TRUE,scrollY=300,searching=FALSE))
 
 }
 
