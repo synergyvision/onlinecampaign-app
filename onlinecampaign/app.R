@@ -34,7 +34,8 @@ ui <- dashboardPage( skin = "purple",
                          menuItem("Datos",tabName = 'datos',icon = icon("folder-open")),
                          menuItem("ACP",tabName = 'acp',icon = icon("calculator")),
                          menuItem("Agrupación",tabName = 'agrup',icon = icon("th",lib = "glyphicon")),
-                         menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon"))
+                         menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon")),
+                         menuItem("Series Temporales",tabName = 'series',icon = icon("chart-area",lib = "font-awesome"))
                          
                        )
                      ),
@@ -105,7 +106,13 @@ ui <- dashboardPage( skin = "purple",
                                    box(width = 6,uiOutput('elecciongrupos'),
                                        title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE,
                                        verbatimTextOutput('holaprueba')),
-                                   box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido'))))
+                                   box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido')))),
+                         tabItem(tabName = 'series',
+                                 fluidRow(tabBox(width = 12,
+                                                 title = '',id='tab3',
+                                                 tabPanel(h4('Elección de Variables'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun1'))),
+                                                               fluidRow(box(width = 12,title = "Grupo a analizar",uiOutput("gr1")))                                       
+                                                 )),fluidRow(column(width = 9,h3("Serie Temporal",plotOutput("ser"))))))))
                          )
 
                        )
@@ -356,6 +363,39 @@ output$holaprueba<-renderPrint({
 output$grupoelegido<-renderDataTable({
   return(clusterpam())
 },options=list(scrollX = TRUE,scrollY=300,searching=FALSE))
+
+output$colun1<-renderUI({
+  selectInput(inputId = 'columnasgrupos1',
+                     label = 'Elegir la variable para el análisis de series temporales',
+                     choices = c(input$columnas))
+  
+})
+
+output$gr1<-renderUI({
+  Grupo<-c('Grupo')
+  grupos<-c()
+  for(i in 1:input$cantidadgrupos){
+    grupos[i]<-paste0(Grupo,sep=' ',i)
+  }
+  selectInput(inputId = "elecciongrupos21",
+              label="Escoja el grupo a estudiar",
+              choices = setNames(1:input$cantidadgrupos,grupos),
+              selected = NULL, 
+              width = NULL)
+})
+
+clusterpam1<-reactive({
+  
+  clust_list_pam<-lapply(sort(unique(datapam()$clustering)),function(x)data()[which(datapam()$clustering==x),])
+  return(clust_list_pam[[as.numeric(input$elecciongrupos21)]])
+})
+
+output$ser<-renderPlot({
+  d<-input$columnasgrupos1
+  ggplot(clusterpam1(),aes(y=d,x=seq(1,length(clusterpam1()$d))))+geom_line(col="darkgreen")+xlab("")+ylab("Impresiones")
+})
+
+
 
 }
 
