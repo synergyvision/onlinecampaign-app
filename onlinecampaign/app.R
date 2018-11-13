@@ -105,7 +105,7 @@ ui <- dashboardPage( skin = "purple",
                                  fluidRow(
                                    box(width = 6,uiOutput('elecciongrupos'),
                                        title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE,
-                                       verbatimTextOutput('holaprueba')),
+                                       div(style='overflow-x: scroll',tableOutput('holaprueba'))),
                                    box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido')))),
                          tabItem(tabName = 'series',
                                  fluidRow(tabBox(width = 12,
@@ -356,9 +356,16 @@ clusterpam<-reactive({
   return(clust_list_pam[[as.numeric(input$elecciongrupos2)]])
 })
 
-output$holaprueba<-renderPrint({
-  summary(clusterpam())
+clusterpamnumeric<-reactive({
+  clust_list_pamnumeric<-lapply(sort(unique(datapam()$clustering)),function(x)z()[which(datapam()$clustering==x),])
+  return(clust_list_pamnumeric[[as.numeric(input$elecciongrupos2)]])
 })
+
+output$holaprueba<-renderTable({
+  h1<-do.call(cbind,lapply(clusterpamnumeric(),summary))
+  h1<-round(h1,2)
+  return(h1)
+},rownames = TRUE)
 
 output$grupoelegido<-renderDataTable({
   return(clusterpam())
