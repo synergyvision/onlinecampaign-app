@@ -392,7 +392,7 @@ clusterpam1<-reactive({
 
 output$ser<-renderPlot({
   d<-input$columnasgrupos1
-  ggplot(clusterpam1(),aes(y=clusterpam1()[,d],x=seq(1,length(clusterpam1()[,d]))))+geom_line(col="darkgreen")+xlab("")+ylab("Impresiones")
+  ggplot(clusterpam1(),aes(y=clusterpam1()[,d],x=seq(1,length(clusterpam1()[,d]))))+geom_line(col="darkgreen")+xlab("")+ylab(d)
 })
 
 
