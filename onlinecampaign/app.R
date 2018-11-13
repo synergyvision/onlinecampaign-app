@@ -15,6 +15,8 @@ ensure_version("shinydashboard", "0.7.0")
 ensure_version("ggplot2", "3.0.0")
 ensure_version("cluster", "2.0.6")
 ensure_version("factoextra", "1.0.5")
+ensure_version("forecast", "8.4")
+
 
 library(shiny)
 library(shinydashboard)
@@ -22,7 +24,7 @@ library('readxl')
 library("ggplot2")
 library('cluster')
 library("factoextra")
-
+library("forecast")
 
 
 ui <- dashboardPage( skin = "purple",
@@ -112,7 +114,8 @@ ui <- dashboardPage( skin = "purple",
                                                  title = '',id='tab3',
                                                  tabPanel(h4('Elección de Variables'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun1'))),
                                                                fluidRow(box(width = 12,title = "Grupo a analizar",uiOutput("gr1")))                                       
-                                                 )),fluidRow(column(width = 9,h3("Serie Temporal",plotOutput("ser"))))))))
+                                                 ),column(width = 9,h3("Serie Temporal",plotOutput("ser"))))),
+                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")))))))
                          )
 
                        )
@@ -393,16 +396,25 @@ output$gr1<-renderUI({
 
 clusterpam1<-reactive({
   
-  clust_list_pam<-lapply(sort(unique(datapam()$clustering)),function(x)data()[which(datapam()$clustering==x),])
+  clust_list_pam<-lapply(sort(unique(datapam()$clustering)),function(x)z()[which(datapam()$clustering==x),])
   return(clust_list_pam[[as.numeric(input$elecciongrupos21)]])
 })
 
 output$ser<-renderPlot({
   d<-input$columnasgrupos1
-  ggplot(clusterpam1(),aes(y=clusterpam1()[,d],x=seq(1,length(clusterpam1()[,d]))))+geom_line(col="darkgreen")+xlab("")+ylab(d)
+  # ggplot(clusterpam1(),aes(y=clusterpam1()[,d],x=seq(1,length(clusterpam1()[,d]))))+geom_line(col="darkblue")+xlab("")+ylab(d)
+  ggtsdisplay(clusterpam1()[,d],main=d)
 })
 
+serie<-reactive({
+  d<-input$columnasgrupos1
+  s<-ts(clusterpam1()[,d],frequency = 12)
+})
 
+output$descom<-renderPlot({
+  s1<-decompose(serie())
+  plot(s1)
+})
 
 }
 
