@@ -96,10 +96,11 @@ ui <- dashboardPage( skin = "purple",
                                                  title = '',id='tab2',
                                                  tabPanel(h4('Elección de grupos'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun')))
                                                                                                    ),
-                                                                                            column(width = 4,h3("Diagrama de Codo"),plotOutput("elbow")),
-                                                                                            column(width = 4,sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 2,max = 15,value = 2),
-                                                                                                   fluidRow(h4('Agrupación'),plotOutput('clusplot')))),
-                                                          fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE))),
+                                                                                            column(width = 6,h3("Diagrama de Codo"),plotOutput("elbow"))
+                                                                                            ),
+                                                          fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE)),
+                                                          fluidRow(column(width=4,sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 2,max = 15,value = 2))),
+                                                          fluidRow(column(width = 10,h4('Agrupación'),plotOutput('clusplot')))),
                                                  tabPanel(h4('Resultados'),fluidRow(column(width = 4,h3('Método de la Silueta'),plotOutput('silueta')),
                                                                                     column(width = 4,h3('Componente 1 Vs. Componente 2'),plotOutput('comp1')),
                                                                                     column(width = 4,h3('Componente 2 Vs. Componente 1'),plotOutput('comp2'))))))),
@@ -417,6 +418,9 @@ output$descom<-renderPlot({
 })
 
 }
+
+#fluidRow(sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 2,max = 15,value = 2),
+#         fluidRow(h4('Agrupación'),plotOutput('clusplot')))
 
 
 shinyApp(ui, server)
