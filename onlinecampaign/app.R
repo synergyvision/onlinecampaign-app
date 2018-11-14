@@ -37,7 +37,7 @@ ui <- dashboardPage( skin = "purple",
                          menuItem("ACP",tabName = 'acp',icon = icon("calculator")),
                          menuItem("Agrupación",tabName = 'agrup',icon = icon("th",lib = "glyphicon")),
                          menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon")),
-                         menuItem("Series Temporales",tabName = 'series',icon = icon("chart-area",lib = "font-awesome"))
+                         menuItem("Series Temporales",tabName = 'series',icon = icon("external-link"))
                          
                        )
                      ),
@@ -108,7 +108,7 @@ ui <- dashboardPage( skin = "purple",
                                  fluidRow(
                                    box(width = 6,uiOutput('elecciongrupos'),
                                        title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE,
-                                       div(style='overflow-x: scroll',tableOutput('holaprueba'))),
+                                       div(style='overflow-x: scroll',tableOutput('holaprueba')),tags$hr(),h3('Cantidad de grupos'),tableOutput('ngruposss')),
                                    box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido')))),
                          tabItem(tabName = 'series',
                                  fluidRow(tabBox(width = 12,
@@ -370,6 +370,13 @@ output$holaprueba<-renderTable({
   h1<-round(h1,2)
   return(h1)
 },rownames = TRUE)
+
+output$ngruposss<-renderTable({
+  m<-table(datapam()$clustering)
+  m<-as.data.frame(m)
+  colnames(m)<-c('Número del grupo','Tamaño del grupo')
+  return(m)
+},colnames = TRUE)
 
 output$grupoelegido<-renderDataTable({
   return(clusterpam())
