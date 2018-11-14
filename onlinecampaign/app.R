@@ -117,7 +117,8 @@ ui <- dashboardPage( skin = "purple",
                                                                fluidRow(box(width = 12,title = "Grupo a analizar",uiOutput("gr1")))                                       
                                                  ),column(width = 9,h3("Serie Temporal",plotOutput("ser"))))),
                                                  tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")))),
-                                                 tabPanel(h4("Modelo"),fluidRow(column(width = 10,h3("Modelo Sugerido"),verbatimTextOutput("modelo"))),fluidRow(column(width = 10,h3("Serie Vs. Modelo fijado"),plotOutput("fijado")))))))
+                                                 tabPanel(h4("Modelo"),fluidRow(column(width = 10,h3("Modelo Sugerido"),verbatimTextOutput("modelo"))),fluidRow(column(width = 10,h3("Serie Vs. Modelo fijado"),plotOutput("fijado")))),
+                                                 tabPanel(h4("Residuales"),fluidRow(column(width = 10,h3("Residuales"),plotOutput("resi"))),fluidRow(column(width = 10,h3("Q-Q Normal"),plotOutput("qq")))))))
                          )
 
                        )
@@ -443,6 +444,15 @@ output$fijado<-renderPlot({
   
   plot(serie(),type="l",col="blue")
   lines(z,col="green")
+})
+
+output$resi<-renderPlot({
+  ggtsdisplay(f()$residuals,main="Residuales")
+})
+
+output$qq<-renderPlot({
+  qqnorm(f()$residuals,col="blue")
+  qqline(f()$residuals)
 })
 
 
