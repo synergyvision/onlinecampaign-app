@@ -116,7 +116,8 @@ ui <- dashboardPage( skin = "purple",
                                                  tabPanel(h4('Elección de Variables'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun1'))),
                                                                fluidRow(box(width = 12,title = "Grupo a analizar",uiOutput("gr1")))                                       
                                                  ),column(width = 9,h3("Serie Temporal",plotOutput("ser"))))),
-                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")))))))
+                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")))),
+                                                 tabPanel(h4("Modelo"),fluidRow(column(width = 10,h3("Modelo Sugerido"),verbatimTextOutput("modelo"))),fluidRow(column(width = 10,h3("Serie Vs. Modelo fijado"),plotOutput("fijado")))))))
                          )
 
                        )
@@ -416,13 +417,34 @@ output$ser<-renderPlot({
 
 serie<-reactive({
   d<-input$columnasgrupos1
-  s<-ts(clusterpam1()[,d],frequency = 12)
+  s<-ts(clusterpam1()[,d],frequency = 7)
+})
+
+s1<-reactive({
+  decompose(serie())
 })
 
 output$descom<-renderPlot({
-  s1<-decompose(serie())
-  plot(s1)
+  plot(s1())
 })
+
+f<-reactive({
+  auto.arima(s1()$random)
+})
+
+output$modelo<-renderPrint({
+  return(f())
+})
+
+
+output$fijado<-renderPlot({
+  d<-input$columnasgrupos1
+  z<-f()$fitted+s1()$trend+s1()$seasonal
+  
+  plot(serie(),type="l",col="blue")
+  lines(z,col="green")
+})
+
 
 }
 
