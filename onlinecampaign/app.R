@@ -27,7 +27,7 @@ library("factoextra")
 library("forecast")
 
 
-ui <- dashboardPage(title='hola', skin = "purple",
+ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                      dashboardHeader(title=tags$img(src="img/vision.png", width=100)),
                      dashboardSidebar(
                        sidebarMenu(
