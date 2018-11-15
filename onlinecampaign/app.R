@@ -118,7 +118,8 @@ ui <- dashboardPage( skin = "purple",
                                                  ),column(width = 9,h3("Serie Temporal",plotOutput("ser"))))),
                                                  tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")),column(width=4,box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'hola',collapsible = TRUE,collapsed =TRUE)))),
                                                  tabPanel(h4("Modelo"),fluidRow(column(width = 10,h3("Modelo Sugerido"),verbatimTextOutput("modelo"))),fluidRow(column(width = 10,h3("Serie Vs. Modelo fijado"),plotOutput("fijado")))),
-                                                 tabPanel(h4("Residuales"),fluidRow(column(width = 10,h3("Residuales"),plotOutput("resi"))),fluidRow(column(width = 10,h3("Q-Q Normal"),plotOutput("qq")))))))
+                                                 tabPanel(h4("Residuales"),fluidRow(column(width = 10,h3("Residuales"),plotOutput("resi"))),fluidRow(column(width = 10,h3("Q-Q Normal"),plotOutput("qq")))),
+                                                 tabPanel(h4("Predicción"),fluidRow(box(width = 10,uiOutput("nrodepred"),title = "Cantidad a predecir")),fluidRow(column(width = 10,h3("Predicción"),plotOutput("predic")))))))
                          )
 
                        )
@@ -441,9 +442,11 @@ output$modelo<-renderPrint({
 output$fijado<-renderPlot({
   d<-input$columnasgrupos1
   z<-f()$fitted+s1()$trend+s1()$seasonal
+  # 
+  # plot(serie(),type="l",col="blue")
+  # lines(z,col="green")
   
-  plot(serie(),type="l",col="blue")
-  lines(z,col="green")
+  ggplot(serie(),aes(y=serie(),x=seq(1,length(serie()))))+geom_line(col="black")+geom_line(aes(y=z),col="blue")+guides(fill=guide_legend(title = NULL))
 })
 
 output$resi<-renderPlot({
@@ -451,10 +454,22 @@ output$resi<-renderPlot({
 })
 
 output$qq<-renderPlot({
-  qqnorm(f()$residuals,col="blue")
-  qqline(f()$residuals)
+  # qqnorm(f()$residuals,col="blue")
+  # qqline(f()$residuals)
+  ggplot(f()$residuals,aes(sample=f()$residuals))+stat_qq(color="blue")+stat_qq_line()
 })
 
+output$nrodepred<-renderUI({
+  sliderInput( inputId = "num2",
+               label = "Seleccionar la cantidad de datos a predecir:", value = 1, min = 1,
+               max = nrow(clusterpam1()), step = 1
+  )
+})
+
+output$predic<-renderPlot({
+  arima.f1<-forecast(f(),h=input$num2)
+  plot(arima.f1,col="black")
+})
 
 }
 
