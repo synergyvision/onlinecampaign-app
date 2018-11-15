@@ -116,7 +116,7 @@ ui <- dashboardPage( skin = "purple",
                                                  tabPanel(h4('Elección de Variables'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun1'))),
                                                                fluidRow(box(width = 12,title = "Grupo a analizar",uiOutput("gr1")))                                       
                                                  ),column(width = 9,h3("Serie Temporal",plotOutput("ser"))))),
-                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")))),
+                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")),column(width=4,box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'hola',collapsible = TRUE,collapsed =TRUE)))),
                                                  tabPanel(h4("Modelo"),fluidRow(column(width = 10,h3("Modelo Sugerido"),verbatimTextOutput("modelo"))),fluidRow(column(width = 10,h3("Serie Vs. Modelo fijado"),plotOutput("fijado")))),
                                                  tabPanel(h4("Residuales"),fluidRow(column(width = 10,h3("Residuales"),plotOutput("resi"))),fluidRow(column(width = 10,h3("Q-Q Normal"),plotOutput("qq")))))))
                          )
