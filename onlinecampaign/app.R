@@ -463,7 +463,7 @@ output$fijado<-renderPlot({
   # plot(serie(),type="l",col="blue")
   # lines(z,col="green")
   
-  ggplot(serie(),aes(y=serie(),x=seq(1,length(serie()))))+geom_line(col="black")+geom_line(aes(y=z),col="blue")+guides(fill=guide_legend(title = NULL))
+  ggplot(serie(),aes(y=serie(),x=seq(1,length(serie()))))+geom_line(col="black")+geom_line(aes(y=z),col="blue")+xlab("")
 })
 
 output$resi<-renderPlot({
