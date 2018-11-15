@@ -46,9 +46,20 @@ ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                          tabItem(tabName = 'intro',
                                  fluidRow(box(title = tags$b(h3("Introducción")),width = 12,status = "primary",p("El marketing digital (o marketing online) engloba todas aquellas acciones y estrategias publicitarias o comerciales que se ejecutan en los medios y canales de internet. El marketing digital pone a nuestra disposición una serie de herramientas de gran diversidad desde las que pueden realizarse desde pequeñas acciones a prácticamente coste cero hasta complejas estrategias (y obviamente más costosas) en las que se pueden combinar infinidad de técnicas y recursos. Los buscadores, como Google, Yahoo o Bing, son herramientas que permiten a los usuarios de internet encontrar contenidos relacionados con aquello que están buscando. 
 Para poder posicionar con éxito una página o blog en las primeras posiciones de los buscadores y conseguir visitantes, es imprescindible realizar acciones de posicionamiento orgánico (SEO) o de pago (SEM) en una estrategia de marketing online.",style = "font-size: 16px"),div(img(src="img/seo.png",width=500),style="text-align: center;"))),
-                                 fluidRow(column(width=4,box(width = 12,title = tags$b(h3("Análisis de componentes principales")),status='warning',p('hola',style = "font-size: 16px"),div(img(src="img/pca.png",width=250),style="text-align: center;"))),
-                                          column(width = 4,box(width = 12,title = tags$b(h3("Agrupaciones")),status="warning",p('guacho',style = "font-size: 16px"),div(img(src="img/cluster.jpg",width=250),style="text-align: center;"))),
-                                          column(width = 4,box(width = 12,title = tags$b(h3("Series Temporales")),status='warning',p('como estas',style = "font-size: 16px"),div(img(src="img/serie.jpg",width=250),style="text-align: center;"))))),
+                                 fluidRow(column(width=4,box(width = 12,title = tags$b(h3("Análisis de componentes principales")),status='warning',p('El análisis de componentes principales (ACP), PCA en sus siglas en Inglés, es una técnica
+multivariada de datos que se basa principalmente en la reducción de dimensionalidad de un
+conjunto de datos. Las componentes principales son combinaciones lineales de las variables
+originales, las cuales no son correlacionadas y ordenadas de modo que los primeros pocos
+representen la mayor variabilidad de todas las variables originales y
+en consecuencia proveen una base más simple para el tratamiento de los datos.',style = "font-size: 16px"),div(img(src="img/pca.png",width=250),style="text-align: center;"))),
+                                          column(width = 4,box(width = 12,title = tags$b(h3("Agrupaciones")),status="warning",p('El análisis de grupos es uno de los métodos impotantes de la minería de datos para
+descubrir conocimiento de un conjunto de datos multidimensional. El objetivo de agrupar es
+                                                                                                                                identificar patrones o grupos de objetos similares dentro de un conjunto de dato de interés.',style = "font-size: 16px"),div(img(src="img/cluster.jpg",width=250),style="text-align: center;"))),
+                                          column(width = 4,box(width = 12,title = tags$b(h3("Series Temporales")),status='warning',p('El análisis de los datos experimentales que se han observado en diferentes puntos en
+el tiempo conduce a problemas nuevos y únicos en la modelización e inferencia estadística. El enfoque sistemático por el cual se trata de
+responder a las preguntas matemáticas y estadísticas planteadas por estas correlaciones se
+conoce comúnmente como análisis de series de tiempo. El objetivo primario en el análisis de series de tiempo es desarrollar modelos matemáticos
+que provean una descripción apropiada para los datos muestrales.',style = "font-size: 16px"),div(img(src="img/serie.jpg",width=250),style="text-align: center;"))))),
                          tabItem(tabName = 'datos',
                                  fluidRow(box(width = 3,
                                               title = 'Cargar Datos',
