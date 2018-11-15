@@ -125,7 +125,7 @@ que provean una descripción apropiada para los datos muestrales.',style = "font
                                  fluidRow(
                                    box(width = 6,uiOutput('elecciongrupos'),
                                        title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE,
-                                       div(style='overflow-x: scroll',tableOutput('holaprueba')),tags$hr(),h3('Cantidad de grupos'),tableOutput('ngruposss')),
+                                       div(style='overflow-x: scroll',tableOutput('holaprueba')),tags$hr(),h3('Estructura de grupos'),tableOutput('ngruposss')),
                                    box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido')))),
                          tabItem(tabName = 'series',
                                  fluidRow(tabBox(width = 12,
