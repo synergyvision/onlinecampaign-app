@@ -45,7 +45,10 @@ ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                        tabItems(
                          tabItem(tabName = 'intro',
                                  fluidRow(box(title = tags$b(h3("Introducción")),width = 12,status = "primary",p("El marketing digital (o marketing online) engloba todas aquellas acciones y estrategias publicitarias o comerciales que se ejecutan en los medios y canales de internet. El marketing digital pone a nuestra disposición una serie de herramientas de gran diversidad desde las que pueden realizarse desde pequeñas acciones a prácticamente coste cero hasta complejas estrategias (y obviamente más costosas) en las que se pueden combinar infinidad de técnicas y recursos. Los buscadores, como Google, Yahoo o Bing, son herramientas que permiten a los usuarios de internet encontrar contenidos relacionados con aquello que están buscando. 
-Para poder posicionar con éxito una página o blog en las primeras posiciones de los buscadores y conseguir visitantes, es imprescindible realizar acciones de posicionamiento orgánico (SEO) o de pago (SEM) en una estrategia de marketing online.",style = "font-size: 16px")))),
+Para poder posicionar con éxito una página o blog en las primeras posiciones de los buscadores y conseguir visitantes, es imprescindible realizar acciones de posicionamiento orgánico (SEO) o de pago (SEM) en una estrategia de marketing online.",style = "font-size: 16px"),div(img(src="img/seo.png",width=500),style="text-align: center;"))),
+                                 fluidRow(column(width=4,box(width = 12,title = tags$b(h3("Análisis de componentes principales")),status='warning')),
+                                          column(width = 4,box(width = 12,title = tags$b(h3("Agrupaciones")),status="warning")),
+                                          column(width = 4,box(width = 12,title = tags$b(h3("Series Temporales")),status='warning')))),
                          tabItem(tabName = 'datos',
                                  fluidRow(box(width = 3,
                                               title = 'Cargar Datos',
@@ -475,9 +478,5 @@ output$predic<-renderPlot({
 })
 
 }
-
-#fluidRow(sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 2,max = 15,value = 2),
-#         fluidRow(h4('Agrupación'),plotOutput('clusplot')))
-
 
 shinyApp(ui, server)
