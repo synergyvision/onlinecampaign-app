@@ -331,7 +331,12 @@ numbergroups<-reactive({
 })
 
 output$elbow<-renderPlot({
+  if(is.null(input$columnasgrupos)){
+    return
+  }
+  else{
   ggplot(mapping = aes(x=1:15,y=numbergroups()))+geom_line(colour='darkblue')+geom_point(colour='darkblue',size=3)+xlab('Número de Clusters')+ylab('Varianza total inter-cluster')+scale_x_continuous(breaks = 1:15)
+  }
 })
 
 
