@@ -43,6 +43,9 @@ ui <- dashboardPage(title='hola', skin = "purple",
                      ),
                      dashboardBody(
                        tabItems(
+                         tabItem(tabName = 'intro',
+                                 fluidRow(box(title = "Introducción",width = 12, solidHeader = TRUE,status = "primary",'El marketing digital (o marketing online) engloba todas aquellas acciones y estrategias publicitarias o comerciales que se ejecutan en los medios y canales de internet. El marketing digital pone a nuestra disposición una serie de herramientas de gran diversidad desde las que pueden realizarse desde pequeñas acciones a prácticamente coste cero hasta complejas estrategias (y obviamente más costosas) en las que se pueden combinar infinidad de técnicas y recursos. Los buscadores, como Google, Yahoo o Bing, son herramientas que permiten a los usuarios de internet encontrar contenidos relacionados con aquello que están buscando. 
+Para poder posicionar con éxito una página o blog en las primeras posiciones de los buscadores y conseguir visitantes, es imprescindible realizar acciones de posicionamiento orgánico (SEO) o de pago (SEM) en una estrategia de marketing online.',collapsible = TRUE,collapsed =FALSE))),
                          tabItem(tabName = 'datos',
                                  fluidRow(box(width = 3,
                                               title = 'Cargar Datos',
@@ -116,7 +119,7 @@ ui <- dashboardPage(title='hola', skin = "purple",
                                                  tabPanel(h4('Elección de Variables'),fluidRow(column(width=3,fluidRow(box(width = 12,title = 'Variables Númericas',uiOutput('colun1'))),
                                                                fluidRow(box(width = 12,title = "Grupo a analizar",uiOutput("gr1")))                                       
                                                  ),column(width = 9,h3("Serie Temporal",plotOutput("ser"))))),
-                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")),column(width=4,box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'hola',collapsible = TRUE,collapsed =TRUE)))),
+                                                 tabPanel(h4("Descomposición Serie"),fluidRow(column(width = 8,h3("Descomposición"),plotOutput("descom")),column(width=4,box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'El análisis clásico de las series de tiempo se basa en la suposición de que los valores que toma la variable de observación es la consecuencia de tres componentes, cuya actuación conjunta da como resultados los valores medidos, estas componentes son: Componente tendencia (trend), Componente estacional (seasonal), Componente aleatoria (random).',collapsible = TRUE,collapsed =TRUE)))),
                                                  tabPanel(h4("Modelo"),fluidRow(column(width = 10,h3("Modelo Sugerido"),verbatimTextOutput("modelo"))),fluidRow(column(width = 10,h3("Serie Vs. Modelo fijado"),plotOutput("fijado")))),
                                                  tabPanel(h4("Residuales"),fluidRow(column(width = 10,h3("Residuales"),plotOutput("resi"))),fluidRow(column(width = 10,h3("Q-Q Normal"),plotOutput("qq")))),
                                                  tabPanel(h4("Predicción"),fluidRow(box(width = 10,uiOutput("nrodepred"),title = "Cantidad a predecir")),fluidRow(column(width = 10,h3("Predicción"),plotOutput("predic")))))))
