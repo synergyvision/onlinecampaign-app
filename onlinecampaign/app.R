@@ -27,7 +27,7 @@ library("factoextra")
 library("forecast")
 
 
-ui <- dashboardPage( skin = "purple",
+ui <- dashboardPage(title='hola', skin = "purple",
                      dashboardHeader(title=tags$img(src="img/vision.png", width=100)),
                      dashboardSidebar(
                        sidebarMenu(
@@ -101,7 +101,7 @@ ui <- dashboardPage( skin = "purple",
                                                           fluidRow(box(width = 3,title = 'Observación',solidHeader = TRUE,status = "primary","Se recomienda usar las variables representativas que se consideran en el Análisis de Componentes Principales",collapsible = TRUE,collapsed =TRUE),box(width = 4,title = 'Observación',solidHeader = TRUE,status = "primary","El diagrama de codo recomienda el número apropiado de grupos a usar para la agrupación",collapsible = TRUE,collapsed =TRUE)),
                                                           fluidRow(column(width=4,sliderInput(inputId = 'cantidadgrupos',label = 'Elija la cantidad de grupos a formar:',min = 2,max = 15,value = 2))),
                                                           fluidRow(column(width = 10,h4('Agrupación'),plotOutput('clusplot')))),
-                                                 tabPanel(h4('Resultados'),fluidRow(column(width = 8,h3('Método de la Silueta'),plotOutput('silueta')),column(width=4,box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'hola',collapsible = TRUE,collapsed =TRUE))),
+                                                 tabPanel(h4('Resultados'),fluidRow(column(width = 8,h3('Método de la Silueta'),plotOutput('silueta')),column(width=4,box(title = "Observación",width = 12, solidHeader = TRUE,status = "primary",'El analisis de la Silueta mide que tan bien se agrupo una observacion comparando su similitud con el resto de observaciones de su cluster frente a las de los otros clusters. El valor del índice de la silueta esta entre los valores -1 y 1, siendo el valor 1 un indicativo que la observacion se ha asignado al grupo correcto y -1 como una mala asignacion. El método de la silueta consiste en promediar todos estos índices.',collapsible = TRUE,collapsed =TRUE))),
                                                                            fluidRow(column(width = 6,h3('Componente 1 Vs. Componente 2'),plotOutput('comp1')),
                                                                                     column(width = 6,h3('Componente 2 Vs. Componente 1'),plotOutput('comp2'))))))),
                          tabItem(tabName = 'resu',
