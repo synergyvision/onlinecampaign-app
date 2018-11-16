@@ -1,6 +1,6 @@
 ---
 title: "Evaluación y optimización de campañas online."
-author: "Jose castillo <br> Yoselin Arvelaiz"
+author: "Jose Castillo <br> Yoselin Arvelaiz"
 date: "Noviembre de 2018"
 output: ioslides_presentation
 ---
@@ -24,42 +24,168 @@ El marketing digital es una estrategia imprescindible para las marcas por la gra
 
 En el trabajo que se presenta haremos uso en principio de datos concernientes a Campañas Online para evaluar y optimizar las palabras claves desde un buscador de Internet (Google). A este conjunto de datos se le aplica una reducción de dimensionalidad mediante el Análisis de componentes principales, posteriormente se le aplica la técnica de agrupamiento PAM. Una vez que se consigue la clasificación del conjunto de palabras se destacan las características de estos grupos o clusters y finalmente se sugieren modelos ARIMA para las variables consideradas.
 
-
+# Análisis de Componentes Principales
 ## Análisis de Componentes Principales 
 
+El Análisis de Componentes Principales (ACP) describe la variación en un conjunto de
+variables correlacionadas, $x = (x_1, x_2, ..., x_q)$, en términos de una conjunto nuevo de variables no correlacionadas, $y = (y_1, y_2, ..., y_q)$, la cuál cada una es combinación lineal de la variable $x$.
+
+El objetivo del ACP es representar en las primeras dos ó tres componentes principales
+la mayor cantidad de variabilidad de todo el conjunto de datos y poder así visualizarlas
+gráficamente obteniendo de esta manera una mínima perdida de información. El resto
+de las componentes principales representan el resto de la variabilidad de los datos.
 
 
+##
+
+El ACP comporta el cálculo de la descomposición en autovalores de la matriz covarianza,
+normalmente tras centrar los datos en la media de cada atributo.
+Es importante mencionar que existen dos formas básicas de aplicar el ACP:
 
 
+1. Método basado en la matriz de correlación, cuando los datos no son dimensionalmente
+homogéneos o el orden de magnitud de las variables aleatorias medidas no es el mismo.
+
+2. Método basado en la matriz de covarianza, que se usa cuando los datos son
+dimensionalmente homogéneo y presentan valores medios similares.
+
+# Análisis de Agrupamiento
+## Análisis de Agrupamiento.
+El análisis de agrupamiento consiste en un conjunto de métodos númericos cuyo
+objetivo en común es encontrar o descrubrir grupos o 'clusters' de un conjunto de
+datos que sean homogéneos entre sí y diferentes de los otros grupos. El propósito de
+dicho análisis es identificar patrones en los grupos resultantes.
+
+Los métodos de agrupamiento principales son:
+
+- Basados en particiones: Son algoritmos que dividen los datos en k clusters,
+donde el número entero k es especificado por el usuario.
+
+##
+- Agrupamiento jerárquico: Este método a su vez se subdivide en dos métodos:
+Los algoritmos aglomerativos y los divisivos. Los algoritmos aglomerativos consisten en que cada observación forma su propio cluster, luego los clusters con mayor similitud se agrupan formando un nuevo cluster, este proceso se repite hasta que solo quede un solo cluster el cual contiene a todo el conjunto de datos. Por otro lado los algoritmos divisivos empiezan con el conjunto de datos como un solo cluster y a partir de ahi este se divide en varios clusters hasta que cada
+observación se convierta en su propio cluster.
 
 
+## Medidas de Distancia y Similitud.
+Es de central importancia conocer que tan 'cerca' o 'lejos' están las observaciones
+entre sí para poder agruparlos, conocer esta medida de cercanía se le conoce como
+similitud (disimilitud) ó distancia. Dos observaciones son cercanas si tienen una
+disimilitud o distancia corta o una similitud grande.
+
+La elección de la distancia es de gran peso para las agrupaciones pues dependiendo
+de la similitud entre las observaciones esta influirá en la conformación de los grupos.
+Las medidas de disimilitud están divididas entre las medidas de distancia y las
+medidas de distancia basadas en la correlación.
+
+##
+Algunas de las medidas de distancia más usadas son:
 
 
-## aplicacion
+1. Distancia Euclídea:
+$$d(x,y)=\sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}.$$
+
+2. Distancia Manhattan:
+$$d(x,y)=\sum_{i=1}^{n}|x_i - y_i|.$$
+Donde $x = (x_1, ..., x_n)$ e $y = (y_1, ..., y_n)$ son dos observaciones o vectores de tamaño $n$.
+
+
+## Estandarización
+Cuando estandarizamos las variables, para cada observación $x_i$ tenemos:
+
+$$\frac{x_i - center(x)}{scale(x)}.$$
+
+Donde center(x) es una medida de tendencia central de las variables, donde la más
+común es la media y scale(x) la medida de dispersión, donde la más común es la
+desviación estándar.
+
+## K-medoids o PAM
+El objetivo de PAM es encontrar un subconjunto de observaciones (medoids) $\{m_1,...,m_k\}$ $\subset$ $\{x_1,..x_m\}$ del conjunto de datos tal que la suma total de la distancias de todas las observaciones a su medoid más cercano sea mínima, es decir, encontrar $\{m_1,...,m_k\}$ tal que la expresión dada por:
+
+$$\sum_{i=1}^{k} \sum_{x_j \in G_i}^{}d(x_j,m_i).$$
+sea mínima, donde $G_i = \displaystyle \{x_j : d(x_j,m_i)=\underset{i=1,..,k}{min} d(x_j,m_i)\}$.
+
+## Método de la Silueta
+
+El análisis de la Silueta mide que tan bién se agrupó una observación comparando su similitud con el resto de observaciones de su cluster frente a las de los otros clusters. Para conocer esta medida calculamos el índice de silueta $S_{(x_j)}$ para cada observación $x_j \in \{x_1,..,x_m\}$, donde $\{x_1,..,x_m\}$ son todas las observaciones del conjunto de datos. 
+
+El valor $S_{(x_j)}$ esta entre -1 y 1, siendo el valor 1 un indicativo que la observación se ha asignado al grupo correcto y -1 como una mala asignación.
+
+##
+
+El método de la silueta consiste en calcular el promedio de todos los índices de silueta $S_{(x_j)}$ de las observaciones y escoger el valor $K$ tal que maximiza este promedio, es decir, escoger el valor $K$ tal que la expresión dada por:
+
+$$\bar{S}=\frac{1}{m} \sum_{i=1}^{m}S_{(x_j)}.$$
+
+## Series de Tiempo
+
+Una serie de tiempo es un conjunto de observaciones $x_t$ , cada una registrada a un tiempo
+específico $t$.
+
+Un modelo de series de tiempo para los datos observados $\{x_t\}$ es una especificación de una distribución conjunta (o posiblemente solo de medias y covarianzas) de una sucesión de variables aleatorias $\{X_t\}$ de las cuales $\{x_t\}$ es una realización.
+
+El análisis clásico de las series de tiempo se basa en la suposición de que los valores que toma la variable de observación es la consecuencia de tres componentes, cuya actuación conjunta da
+como resultados los valores medidos, estos componentes son:
+
+##
+- Componente tendencia.
+- Componente estacional.
+- Componente aleatoria.
+
+De las tres componentes anteriores las dos primeras son componentes determinísticas, mientras que la última es aleatoria. Así, se puede denotar la serie de tiempo como,
+$$X_t=T_t+E_t+\epsilon_t$$ 
+donde $T_t$ es la tendencia, $E_t$ es la componente estacional y $\epsilon_t$ es la componente aleatoria.
+
+## Regresión de Series de Tiempo
+
+Una regresión clásica se puede expresar como:
+$$X_t=\beta_1z_{t_1}+\beta_2z_{t_2}+...+\beta_qz_{t_q}+w_t, \; t=1,2,...,n.$$
+Influenciada por una colección de series independientes $z_{t_1},z_{t_2},...,z_{t_q}$ fijas y conocidas, donde $\beta_1,\beta_2,...,\beta_q$ son los coeficientes de regresión fijos y desconocidos, $\{w_t\}$ es un error aleatorio o un proceso de ruido consistente de variables  normales independientes e idénticamente distribuidas con media cero y varianza $\sigma_w^2$.
+
+##
+ Suponga que consideramos un modelo de regresión con $k$ coeficientes y denotemos el estimador de máxima verosimilitud para la varianza como
+ $$\hat{\sigma_k^2}=\displaystyle \frac{RSS_k}{n}$$
+donde $RSS_k$ denota la suma residual de cuadrados bajo el modelo con $k$ coeficientes de regresión. 
+
+## Criterio de Información Akaike (AIC)
+
+El \textit{Criterio de Información de Akaike} se define como:
+                         $$AIC=\ln{\hat{\sigma_k^2}}+\frac{n+2k}{n}$$
+                         donde $\hat{\sigma_k^2}$ está dado por la ecuación anterior y $k$ es el número de parámetros en el modelo.
+
+El valor de $k$ que minimiza AIC especifica el mejor modelo. La idea es que la minimización $\hat{\sigma_k^2}$ sea razonablemente objetiva.
+
+         
+En el criterio AIC, el sesgo es aproximado por el número de parametros los cuales son constantes y no tienen variabilidad. Para el modelo de regresión, la correción del sesgo del logaritmo de la verosimilitud se define como sigue,
+
+## AIC con sesgo corregido (AICc)
+
+
+$$AICc=\ln{\hat{\sigma_k^2}}+\frac{n+k}{n-k-2}$$
+                        donde $\hat{\sigma_k^2}$ está dado previamente, $k$ es el número de parámetros en el modelo y $n$ es el tama}o de la muestra.
+                        
+De manera similar que en el AIC, se selecciona el modelo con el menor valor de AICc.
+
+## Criterio de Información de Schwarz (SIC)
+
+$$SIC=\ln{\hat{\sigma_k^2}}+\frac{k\ln{n}}{n}.$$
+SIC es también llamado Criterio de Información Bayesiano (BIC) es un criterio para la selección de modelos entre un conjunto finito de modelos. Se basa, en parte, en la función de probabilidad y está estrechamente relacionado con el Criterio de Información Akaike (AIC).
+
+## Modelos ARIMA
+
+El integrado ARMA, o modelo ARIMA, es una ampliación de una clase de modelos ARMA para
+incluir la diferenciación.
+
+Un proceso $x_t$ se dice que es ARIMA($p,d,q$) si 
+                 $$\Delta^dx_t=(1-B)^dx_t$$ es ARMA($p,q$). En general, escribiremos el modelo como
+                  $$
+                 \phi(B)(1-B)^dx_t=\theta(B)w_t. 
+                 $$
+                 Si $E(\Delta^dx_t)=\mu$, escribimos el modelo como 
+                 $$\phi(B)(1-B)^dx_t=\delta + \theta(B)w_t,$$
+                 donde $\delta=\mu(1-\phi_1-\phi_2-...-\phi_p).$
+                 
+
+## Aplicación
 
 <a href="http://127.0.0.1:4512/">¡Campaña online!</a>
-
-## R Markdown
-
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
-
-## Slide with Bullets
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Slide with Plot
-
-```{r pressure}
-plot(pressure)
-```
-
