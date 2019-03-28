@@ -37,6 +37,8 @@ ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                          menuItem("ACP",tabName = 'acp',icon = icon("calculator")),
                          menuItem("Agrupación",tabName = 'agrup',icon = icon("th",lib = "glyphicon")),
                          menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon")),
+                         menuItem("Modelos lineales",tabName = 'Glm',icon = icon("signal",lib = "glyphicon"),
+                                  menuSubItem("Modelo Lineal", tabName = "GLM", icon = icon("circle-o"))),
                          menuItem("Series Temporales",tabName = 'series',icon = icon("external-link"))
                          
                        )
@@ -127,6 +129,16 @@ que provean una descripción apropiada para los datos muestrales.',style = "font
                                        title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE,
                                        div(style='overflow-x: scroll',tableOutput('holaprueba')),tags$hr(),h3('Estructura de grupos'),tableOutput('ngruposss')),
                                    box(width = 6,h3('Datos del grupo seleccionado:'),dataTableOutput('grupoelegido')))),
+                         
+                         
+                         tabItem(tabName = 'GLM',
+                                 
+                                 fluidRow(column(4,box(width = 10,title = "datos",selectInput("dat","Selecione",choices = c("Originales","ACP","Cluster"))),conditionalPanel( condition = "input.dat=='Cluster'", box(width = 12,uiOutput('elecciongruposglm'),
+                                                                                                                                                                                                                      title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE
+                                                                                                                                                                                                                      ,tags$hr(),h3('Estructura de grupos'),tableOutput('ngruposssglm')) )
+                                                 ),column(8,box(width = 10,title = "datos",dataTableOutput("datMod"))))),
+                         
+                         
                          tabItem(tabName = 'series',
                                  fluidRow(tabBox(width = 12,
                                                  title = '',id='tab3',
@@ -492,6 +504,65 @@ output$predic<-renderPlot({
   arima.f1<-forecast(f(),h=input$num2)
   plot(arima.f1,col="black")
 })
+############---------------------------parte del server de glm
+
+dat12 <- reactive({
+  
+  if(input$dat=="Originales"){
+    
+    return(data())
+  }else if(input$dat=="Cluster"){
+    return(clusterpamglm())
+    }else{return(NULL)}
+  
+})
+
+
+output$elecciongruposglm<-renderUI({
+  Grupo<-c('Grupo')
+  grupos<-c()
+  for(i in 1:input$cantidadgrupos){
+    grupos[i]<-paste0(Grupo,sep=' ',i)
+  }
+  selectInput(inputId = "elecciongrupos2glm",
+              label="Escoja el grupo a resumir",
+              choices = setNames(1:input$cantidadgrupos,grupos),
+              selected = NULL, 
+              width = NULL)
+})
+
+
+
+
+output$ngruposssglm<-renderTable({
+  m<-table(datapam()$clustering)
+  m<-as.data.frame(m)
+  colnames(m)<-c('Número del grupo','Tamaño del grupo')
+  return(m)
+},colnames = TRUE)
+
+clusterpamglm<-reactive({
+  #cluster<-c('Cluster')
+  # for(i in 1:input$cantidadgrupos){ 
+  #   nam <- paste(cluster, i, sep = "")
+  #   assign(nam,clust_list_pam[[i]])
+  # }
+  clust_list_pam<-lapply(sort(unique(datapam()$clustering)),function(x)data()[which(datapam()$clustering==x),])
+  return(clust_list_pam[[as.numeric(input$elecciongrupos2glm)]])
+})
+
+output$datMod <- renderDataTable({
+  
+  
+  dat12()
+  
+},options=list(scrollX = TRUE,scrollY=300,searching=FALSE))
+
+
+
+
+
+####----------------------------------Fin del server de glm
 
 }
 

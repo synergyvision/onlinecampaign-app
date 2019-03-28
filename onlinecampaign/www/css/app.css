@@ -1,0 +1,102 @@
+/* top header left logo part*/
+.skin-blue .main-header .logo {
+background-color: #182f58;
+border-color: #FFF;
+color: #FFF;
+opacity: 1;
+}
+
+/* top header left logo part on hover*/
+.skin-blue .main-header .logo:hover {
+background-color: #182f58;
+border-color: #FFF;
+color: #FFF;
+opacity: 0.95;
+}
+
+/* top header right part*/
+.skin-blue .main-header .navbar {
+background-color: #182f58;
+border-color: #FFF;
+color: #FFF;
+opacity: 0.95;
+}        
+
+/* top header sidebar toggle logo */
+.skin-blue .main-header .navbar .sidebar-toggle {
+    color: #ff6800;
+}
+
+/* top header sidebar toggle logo on hover*/
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+    background-color: #ff6800;
+	color:white;
+}
+
+/* main sidebar */
+.skin-blue .main-sidebar {
+background-color: #182f58;
+border-color: #FFF;
+color: #FFF;
+opacity: 0.95;
+}
+
+/* Vision top logo left hand side */
+#VisionLogo{
+  position:fixed; 
+  top: 3px; 
+  left:15px;
+  z-index: 100000000000;
+  height: 55px;
+}
+
+/* Vision top right left hand side text */
+#VisionLogoText{
+  position:fixed; 
+  top: 21px; 
+  left:240px;
+  z-index: 100000000000;
+}
+
+/* main tab content */
+.content-wrapper{
+background-color: white;
+}
+
+/* side bar hover color strip (lhs)*/
+.skin-blue .sidebar-menu>li.active>a, .skin-blue .sidebar-menu>li:hover>a {
+    border-left-color: #ff6800;
+}
+
+
+/* re-enable sidebar animation - part 1*/
+.content-wrapper,
+.right-side,
+.main-footer {
+  -webkit-transition: -webkit-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+  -moz-transition: -moz-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+  -o-transition: -o-transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+  margin-left: 230px;
+  z-index: 820;
+}
+
+/* re-enable sidebar animation - part 2*/
+.main-sidebar,
+.left-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 50px;
+  min-height: 100%;
+  width: 230px;
+  z-index: 810;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+
+
+
