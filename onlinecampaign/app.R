@@ -25,7 +25,7 @@ library("ggplot2")
 library('cluster')
 library("factoextra")
 library("forecast")
-
+library(plotly)
 
 ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                      dashboardHeader(title=tags$img(src="img/vision.png", width=100)),
@@ -38,7 +38,11 @@ ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                          menuItem("Agrupación",tabName = 'agrup',icon = icon("th",lib = "glyphicon")),
                          menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon")),
                          menuItem("Modelos lineales",tabName = 'Glm',icon = icon("signal",lib = "glyphicon"),
-                                  menuSubItem("Modelo Lineal", tabName = "GLM", icon = icon("circle-o"))),
+                                  menuSubItem("Selección de datos", tabName = "GLM", icon = icon("circle-o")),
+                                  menuSubItem("Modelo", tabName = "GLM2", icon = icon("circle-o"))
+                                  
+                                  ),
+                                  
                          menuItem("Series Temporales",tabName = 'series',icon = icon("external-link"))
                          
                        )
@@ -133,11 +137,28 @@ que provean una descripción apropiada para los datos muestrales.',style = "font
                          
                          tabItem(tabName = 'GLM',
                                  
-                                 fluidRow(column(4,box(width = 10,title = "datos",selectInput("dat","Selecione",choices = c("Originales","ACP","Cluster"))),conditionalPanel( condition = "input.dat=='Cluster'", box(width = 12,uiOutput('elecciongruposglm'),
+                                 fluidRow(column(4,box(width = 10,title = "datos",selectInput("dat","Selecione",choices = c("Originales","ACP","Cluster"))),conditionalPanel( condition = "input.dat=='Cluster'", box(width = 12,selectInput("select", h3("Escoga grupo"), choices = list("Choice 1" = 1), selected = 1),
                                                                                                                                                                                                                       title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE
                                                                                                                                                                                                                       ,tags$hr(),h3('Estructura de grupos'),tableOutput('ngruposssglm')) )
-                                                 ),column(8,box(width = 10,title = "datos",dataTableOutput("datMod"))))),
+                                                 ),column(8,box(width = 10,title = "datos",dataTableOutput("datMod")))
+                                          
+                                          
+                                          ),
+                                 fluidRow( box( background="yellow",width=120,status = "warning",
+                                                selectInput('columns4', 'Selecciona variable de estudio', "Seleccione primero los datos"))),
+                                 
+                                 
+                                 fluidRow( box( background="yellow",width=12,status = "warning",plotlyOutput('Histograma2'))),
+                                 fluidRow(
+                                   box(title = h3("Prueba de hipótesis de normalidad"), style = "overflow-x:scroll",width=12,status = "warning",dataTableOutput('datatable12'))
+                                 )
+                                 ),
                          
+                         
+                         tabItem(tabName = 'GLM2',
+                                 fluidRow()
+                                 
+                                 ),
                          
                          tabItem(tabName = 'series',
                                  fluidRow(tabBox(width = 12,
@@ -518,18 +539,7 @@ dat12 <- reactive({
 })
 
 
-output$elecciongruposglm<-renderUI({
-  Grupo<-c('Grupo')
-  grupos<-c()
-  for(i in 1:input$cantidadgrupos){
-    grupos[i]<-paste0(Grupo,sep=' ',i)
-  }
-  selectInput(inputId = "elecciongrupos2glm",
-              label="Escoja el grupo a resumir",
-              choices = setNames(1:input$cantidadgrupos,grupos),
-              selected = NULL, 
-              width = NULL)
-})
+
 
 
 
@@ -541,6 +551,14 @@ output$ngruposssglm<-renderTable({
   return(m)
 },colnames = TRUE)
 
+
+vars<-reactive({1:input$cantidadgrupos})
+observe({
+  
+  updateSelectInput(session, 'select', choices = vars())
+})
+
+
 clusterpamglm<-reactive({
   #cluster<-c('Cluster')
   # for(i in 1:input$cantidadgrupos){ 
@@ -548,7 +566,7 @@ clusterpamglm<-reactive({
   #   assign(nam,clust_list_pam[[i]])
   # }
   clust_list_pam<-lapply(sort(unique(datapam()$clustering)),function(x)data()[which(datapam()$clustering==x),])
-  return(clust_list_pam[[as.numeric(input$elecciongrupos2glm)]])
+  return(clust_list_pam[[as.numeric(input$select)]])
 })
 
 output$datMod <- renderDataTable({
@@ -560,7 +578,75 @@ output$datMod <- renderDataTable({
 
 
 
+outVar3 = reactive({
+  
+  nombres <- colnames(dat12())
+  
+  
+  
+  nombres
+})  
 
+
+observe({
+  updateSelectInput(session, "columns4",
+                    choices = outVar3()
+  )}) 
+
+
+
+output$Histograma2 <- renderPlotly({ 
+  posi <- which(colnames(dat12())== input$columns4 )
+  
+  
+  
+  if(is.factor(dat12()[,posi])){
+    ggplot(dat12(),aes(x=dat12()[,posi]))+ geom_bar(position=position_dodge(), fill = "#FF3466")
+    
+    
+  }else{
+    
+    ggplot(data=dat12(), aes(as.numeric(dat12()[,posi]))) + 
+      geom_histogram( 
+        col="red", 
+        fill="green", 
+        alpha = .2)
+    
+  }
+  
+  
+  
+})
+
+source("www/categoria.R")
+
+datosSC2<- reactive({
+  
+  cate(dat12())
+  
+  
+})
+
+source("www/bondad.R")
+
+pvalExp1 <- reactive({
+  
+  bondad(datosSC2())
+  
+  
+  
+})
+
+
+
+output$datatable12 <-renderDataTable({
+  s <- pvalExp1()
+  
+  m <- as.data.frame(matrix(s,ncol = length(colnames(datosSC2()))))
+  colnames(m) <- colnames(datosSC2())
+  m
+  
+},options = list(scrollX=T,scrollY=300))
 
 ####----------------------------------Fin del server de glm
 

@@ -27,3 +27,4 @@ cate<- function(datos){
   return(jj)
   
 }
+
