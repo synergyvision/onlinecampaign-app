@@ -1,5 +1,11 @@
 glmmulti <- function(data3,nombre,familia,enlace){
   
+  data3 <- as.data.frame(data3)
+  
+  data3 <- apply(data3, 2, as.numeric)
+  
+  data3 <- as.data.frame(data3)
+  
   
   pos <- which(colnames(data3) == nombre)
   

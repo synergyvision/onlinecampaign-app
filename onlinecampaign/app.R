@@ -38,10 +38,7 @@ ui <- dashboardPage(title='Synergy Vision', skin = "purple",
                          menuItem("Agrupación",tabName = 'agrup',icon = icon("th",lib = "glyphicon")),
                          menuItem("Resumen",tabName = 'resu',icon = icon("signal",lib = "glyphicon")),
                          menuItem("Modelos lineales",tabName = 'Glm',icon = icon("signal",lib = "glyphicon"),
-                                  menuSubItem("Selección de datos", tabName = "GLM", icon = icon("circle-o")),
-                                  menuSubItem("Modelo", tabName = "GLM2", icon = icon("circle-o"))
-                                  
-                                  ),
+                                  menuSubItem("Generalizado", tabName = "GLM", icon = icon("circle-o"))),
                                   
                          menuItem("Series Temporales",tabName = 'series',icon = icon("external-link"))
                          
@@ -151,12 +148,29 @@ que provean una descripción apropiada para los datos muestrales.',style = "font
                                  fluidRow( box( background="yellow",width=12,status = "warning",plotlyOutput('Histograma2'))),
                                  fluidRow(
                                    box(title = h3("Prueba de hipótesis de normalidad"), style = "overflow-x:scroll",width=12,status = "warning",dataTableOutput('datatable12'))
-                                 )
                                  ),
-                         
-                         
-                         tabItem(tabName = 'GLM2',
-                                 fluidRow()
+                                 
+                                 
+                                 fluidRow(column(4,box(title = h3("Seleccione variables independientes"), style = "overflow-x:scroll",width=12,status = "warning",checkboxGroupInput("selec2",c("Seleccione")))),
+                                          column(4,box(title = h3("Tipo de Modelo"), style = "overflow-x:scroll",width=12,status = "warning",radioButtons("selec3","Familia",
+                                                                                                                                                          choices = list("binomial"=1,"gaussian"=2, "Gamma"=3,"inverse.gaussian"=4,"poisson"=5,"quasi"=6,"quasibinomial"=7,"quasipoisson"=8),selected = 2))),
+                                          column(4,box(title = h3("Enlace"), style = "overflow-x:scroll",width=12,status = "warning",radioButtons("enlace","Enlace",
+                                                                                                                                                  choices = c(""))))
+                                 ),
+                                 
+                                 fluidRow(
+                                   box(title = h3("Resultados gráficos"), style = "overflow-x:scroll",width=12,status = "warning",plotOutput("grafi2"))
+                                 ),
+                                 
+                                 fluidRow(
+                                   box(title = h3("Resumen"), style = "overflow-x:scroll",width=12,status = "warning",dataTableOutput("summar2"))
+                                 ),
+                                 
+                                 
+                                 fluidRow(
+                                   box(title = h3("Coeficientes del modelo generalizado"), style = "overflow-x:scroll",width=12,status = "warning",dataTableOutput("coeficien2"))
+                                 )
+                                 
                                  
                                  ),
                          
@@ -647,6 +661,79 @@ output$datatable12 <-renderDataTable({
   m
   
 },options = list(scrollX=T,scrollY=300))
+
+
+varMod2 <- reactive({
+  d<- outVar3()
+  e<- which(d == input$columns4)
+  f<- d[-e]
+  f
+  
+})
+
+observe( updateCheckboxGroupInput(session,"selec2",  choices = varMod2() ))
+
+source("www/links.R")
+
+observe({
+  updateRadioButtons(session, "enlace",label = "Enlace",
+                     if(input$selec3==1){ choices =Linkbinomial}
+                     else if(input$selec3==2){choices = Linkgaussian}
+                     else if(input$selec3==3){choices = LinkGamma}
+                     else if(input$selec3==4){choices = Linkinverse.gausian}
+                     else if(input$selec3==5){choices = Linkpoisson}
+                     else if(input$selec3==6){choices = Linkquasi}
+                     else if(input$selec3==7){choices = Linkquasibinomial}
+                     else if(input$selec3==8){choices = Linkquasipoisson}
+                     
+                     
+                     
+  )}) 
+
+
+source("www/gmlMul.R")
+
+modelo2 <- reactive({
+  
+  if(length(input$selec2)==0){"Debe seleccionar variables"}else{
+    if(input$selec3==1){       glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,binomial,input$enlace)}
+    else if(input$selec3==2){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,gaussian,input$enlace)}
+    else if(input$selec3==3){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,Gamma,input$enlace)}
+    else if(input$selec3==4){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,inverse.gaussian,input$enlace)}
+    else if(input$selec3==5){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,poisson,input$enlace)}
+    else if(input$selec3==6){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,quasi,input$enlace)}
+    else if(input$selec3==7){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,quasibinomial,input$enlace)}
+    else if(input$selec3==8){glmmulti(dat12()[c(input$columns4,input$selec2)],input$columns4,quasipoisson,input$enlace)}
+  }
+  
+})
+
+source("www/sumGlm.R")
+
+output$grafi2 <- renderPlot({ 
+  gra(modelo2()[[1]])
+})
+
+
+resGLM <- reactive({
+  
+  resuglm(modelo2()[[1]])
+  
+})
+
+output$summar2 <- renderDataTable({
+  
+  resGLM()[[2]]
+  
+})
+
+
+output$coeficien2 <- renderDataTable({
+  
+  resGLM()[[1]]
+  
+})
+
 
 ####----------------------------------Fin del server de glm
 
