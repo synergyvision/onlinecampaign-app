@@ -134,7 +134,7 @@ que provean una descripción apropiada para los datos muestrales.',style = "font
                          
                          tabItem(tabName = 'GLM',
                                  
-                                 fluidRow(column(4,box(width = 10,title = "datos",selectInput("dat","Selecione",choices = c("Originales","ACP","Cluster"))),conditionalPanel( condition = "input.dat=='Cluster'", box(width = 12,selectInput("select", h3("Escoga grupo"), choices = list("Choice 1" = 1), selected = 1),
+                                 fluidRow(column(4,box(width = 10,title = "Datos",selectInput("dat","Selecione",choices = c("Originales","ACP","Cluster"))),conditionalPanel( condition = "input.dat=='Cluster'", box(width = 12,selectInput("select", h3("Escoga grupo"), choices = list("Choice 1" = 1), selected = 1),
                                                                                                                                                                                                                       title = 'Resumen de los grupos resultantes',status = 'primary',solidHeader = TRUE
                                                                                                                                                                                                                       ,tags$hr(),h3('Estructura de grupos'),tableOutput('ngruposssglm')) )
                                                  ),column(8,box(width = 10,title = "datos",dataTableOutput("datMod")))
