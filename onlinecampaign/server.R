@@ -1,6 +1,10 @@
 shinyServer(function(input, output, session) {
   
   
+###### Seccion datos  
+  
+  #### Aqui se cargan los datos
+  
   data<-reactive({
     infile<-input$cargardatos
     if(is.null(infile)){
@@ -13,15 +17,27 @@ else{
   return(D)
 }
 })
-
+########## Se muestran los datos
 output$datos1<-renderDataTable({
   return(data())
 },options=list(scrollX = TRUE,scrollY=300,searching=FALSE))
 
+
+
+### Se actualiza la seccion de donde se seleccionan los datos
 observe({
   vars<-names(data())
   updateCheckboxGroupInput(session, 'columnas', choices = vars)
 })
+###########################
+
+
+############# Seccion ACP
+
+
+####### Subseccion metodos
+
+############## datos a usar para el metodo
 
 z<-reactive({
   d<-data()[,c(input$columnas)]
@@ -32,18 +48,22 @@ z<-reactive({
 })
 
 
-
+#### Matriz de correlacion
 output$datos2<-renderTable({
   z<-na.omit(z())
   z1<-cor(z())
   return(z1)
 },rownames = TRUE,digits = 4)
 
+#### Matriz de covarianza
 output$datos3<-renderTable({
   z<-na.omit(z())
   z1<-cov(z())
   return(z1)
 },rownames = TRUE,digits = 4)
+
+
+#### Se calculan las componentes principales con la funcion prcomp
 
 pr<-reactive({
   if(is.null(input$metodo1)){
@@ -56,6 +76,7 @@ pr<-reactive({
   }
 })
 
+### donde se muestra la cantidad de varianza que muestra cada componente
 
 output$imagen1<-renderPlot({
   if(is.null(pr())){
@@ -80,6 +101,9 @@ output$imagen1<-renderPlot({
     ggplot(prueba,mapping=aes(x=nombres,y=PVE))+geom_bar(stat = 'identity',fill='darkblue')+geom_text(stat='identity',aes(label=scales::percent(PVE/100)),vjust=-0.3)+scale_y_continuous(labels = function(x) paste0(x, "%"))+xlab('Componentes principales')+ylab('Porcentaje de varianza')
   }
 })
+
+
+## Donde se muestra la varianza acumulada de las componentes
 
 output$imagen2<-renderPlot({
   if(is.null(pr())){
@@ -107,6 +131,10 @@ output$imagen2<-renderPlot({
     
   }
 })
+
+
+
+
 
 output$slid<-renderUI({
   sliderInput( inputId = "num",
